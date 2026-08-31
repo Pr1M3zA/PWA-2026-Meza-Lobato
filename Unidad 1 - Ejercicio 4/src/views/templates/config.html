@@ -1,0 +1,44 @@
+<div class="config-view">
+  <h1 class="view-title">Configuración</h1>
+  <p class="view-lead">Preferencias de tu perfil en el editor de tablero.</p>
+
+  <div class="settings-list">
+    <section class="setting-card">
+      <h3>Perfil</h3>
+      <div class="field">
+        <label for="cfg-nombre">Nombre de usuario</label>
+        <input id="cfg-nombre" type="text" value="Priscila Meza" />
+      </div>
+      <div class="field">
+        <label for="cfg-email">Correo electrónico</label>
+        <input id="cfg-email" type="email" value="prme_22@alu.uabcs.mx" />
+      </div>
+    </section>
+
+    <section class="setting-card">
+      <h3>Preferencias</h3>
+      <div class="field">
+        <label for="cfg-tema">Tema de la interfaz</label>
+        <select id="cfg-tema">
+          <option>Claro</option>
+          <option>Oscuro</option>
+          <option>Sistema</option>
+        </select>
+      </div>
+      <div class="field check-row">
+        <input id="cfg-notif" type="checkbox" checked />
+        <label for="cfg-notif">Recibir notificaciones</label>
+      </div>
+    </section>
+  </div>
+
+  <p style="margin-top:1rem;">
+    <button class="btn" type="button">Guardar cambios</button>
+  </p>
+
+  <p class="view-foot">
+    <a href="/acerca" data-link>Acerca de este sitio</a>
+    |
+    <a href="/contacto" data-link>Contacto</a>
+  </p>
+</div>

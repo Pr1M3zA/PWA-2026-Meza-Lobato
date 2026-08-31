@@ -1,18 +1,23 @@
-// Cumple Req.1: Estructura router/, views/, services/ components/ y utils/
-
 import Router from "./router/router.js";
 import HomeView from "./views/HomeView.js";
+import EditView from "./views/EditView.js";
+import PreguntasView from "./views/PreguntasView.js";
+import TablerosView from "./views/TablerosView.js";
+import GruposView from "./views/GruposView.js";
+import ConfigView from "./views/ConfigView.js";
 import AboutView from "./views/AboutView.js";
 import TileDetailView from "./views/TileDetailView.js";
 import ContactView from "./views/ContactView.js";
 
 const routes = [
-  // Cumple Req.2: Ruta estática de listado
   { path: "/", view: HomeView },
-  // Cumple Req.3: Rutas estáticas secundarias
+  { path: "/editar", view: EditView },
+  { path: "/editar/preguntas", view: PreguntasView },
+  { path: "/editar/tableros", view: TablerosView },
+  { path: "/editar/grupos", view: GruposView },
+  { path: "/configuracion", view: ConfigView },
   { path: "/acerca", view: AboutView },
   { path: "/contacto", view: ContactView },
-  // Cumple Req.4: Ruta dinámica con parametro :id
   { path: "/tile/:id", view: TileDetailView },
 ];
 

@@ -1,6 +1,4 @@
 const API_URL = "https://wires-and-ladders-api.vercel.app/sync/tiles";
-
-// Cumple Req.6: Exportación por defecto 
 export default class TilesService {
   async getAll() {
     const res = await fetch(API_URL);

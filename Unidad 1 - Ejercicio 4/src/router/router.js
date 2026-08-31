@@ -1,11 +1,24 @@
-/**
- * Router — enrutador de cliente basado en la History API.
- */
+import renderActiveLink from "../components/NavBar.js";
+
+// Router: solo reemplaza el contenido de <main id="app">. Nunca toca el shell.
+
+// Latencia simulada para que el skeleton sea visible al navegar.
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const TITLES = {
+  "/": "Inicio",
+  "/editar": "Editar",
+  "/editar/preguntas": "Preguntas",
+  "/editar/tableros": "Tableros",
+  "/editar/grupos": "Grupos",
+  "/configuracion": "Configuración",
+  "/acerca": "Acerca de",
+  "/contacto": "Contacto",
+};
 export default class Router {
   constructor(routes, rootElement) {
     this.routes = routes;
     this.root = rootElement;
-    // Cumple Req.9: Los botones Atrás / Adelante del navegador funcionan correctamente
     window.addEventListener("popstate", () => this.render());
 
     document.addEventListener("click", (event) => {
@@ -21,11 +34,18 @@ export default class Router {
     this.render();
   }
 
-  /**
-   * Debe devolver { route, params } si alguna ruta coincide con "path",
-   * o null si ninguna coincide.
-   */
-  // Cumple Req.4: matchRoute extendido para parámetros dinámicos
+  // Skeleton UI mostrado mientras el router resuelve la vista (estado de carga).
+  getSkeletonHTML() {
+    return `
+      <div class="skeleton-card">
+        <div class="skeleton skeleton-title"></div>
+        <div class="skeleton skeleton-line"></div>
+        <div class="skeleton skeleton-line"></div>
+        <div class="skeleton skeleton-line short"></div>
+      </div>
+    `;
+  }
+
   matchRoute(path) {
     for (const route of this.routes) {
       const routeParts = route.path.split("/").filter(Boolean);
@@ -46,19 +66,31 @@ export default class Router {
 
   async render() {
     const path = window.location.pathname.replace(/\/index\.html$/, "") || "/";
+
+    // 1. Se reemplaza el contenido actual por el skeleton
+    this.root.innerHTML = this.getSkeletonHTML();
+    // 2. Reflejamos la ruta activa en header / footer / sidebar del shell
+    renderActiveLink(path);
+    // 3. Latencia simulada 
+    await delay(400);
+
     const match = this.matchRoute(path);
-    // Cumple Req.8: Disparo del 404 cuando match es null
+
+    // 4. Resolución de la vista (404 cuando match es null)
     if (!match) {
       const { default: NotFoundView } = await import(
         "../views/NotFoundView.js"
       );
-      this.root.innerHTML = NotFoundView();
+      this.root.innerHTML = await NotFoundView();
+      document.title = "Wires&Ladders — 404";
       return;
     }
 
     const html = await match.route.view(match.params);
+    // 5. Solo aquí se escribe contenido nuevo dentro del shell
     this.root.innerHTML = html;
-    document.title = `wlweb — ${path}`;
+
+    document.title = `Wires&Ladders - ${TITLES[path] ?? path.replace(/^\//, "")}`;
   }
 
   init() {

@@ -1,9 +1,5 @@
+import loadTemplate from "../utils/templateLoader.js";
+
 export default function ContactView() {
-  return `
-    <div class="card">
-      <h2>Contacto</h2>
-      <p>Este sitio está siendo desarrollado por Priscila Verónica Meza Lobato.
-      Para más información, puedes contactarme a través de prme_22@alu.uabcs.mx.</p>
-    </div>
-  `;
+  return loadTemplate("contacto.html", import.meta.url);
 }

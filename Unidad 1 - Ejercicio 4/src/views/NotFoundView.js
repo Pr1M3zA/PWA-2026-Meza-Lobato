@@ -1,9 +1,5 @@
-// Cumple Req.8: Vista 404 (ruta no encontrada)
+import loadTemplate from "../utils/templateLoader.js";
+
 export default function NotFoundView() {
-  return `
-    <div class="card">
-      <h2>404 — Página no encontrada</h2>
-      <p>La ruta solicitada no existe.</p>
-    </div>
-  `;
+  return loadTemplate("not-found.html", import.meta.url);
 }
