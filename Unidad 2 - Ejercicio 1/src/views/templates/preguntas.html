@@ -1,37 +1,8 @@
 <div class="preguntas-view">
   <h1 class="view-title">Preguntas</h1>
-  <p class="view-lead">Banco de preguntas para el tablero.</p>
+  <p class="view-lead">{{questionCount}} preguntas cargadas desde el endpoint público.</p>
 
-  <ul class="item-list">
-    <li>
-      <span class="item-tag">Ciencias</span>
-      <h3>¿Cuál es el planeta más grande del sistema solar?</h3>
-      <p>Editar pregunta →</p>
-    </li>
-    <li>
-      <span class="item-tag">Historia</span>
-      <h3>¿En qué año comenzó la Revolución Mexicana?</h3>
-      <p>Editar pregunta →</p>
-    </li>
-    <li>
-      <span class="item-tag">Deportes</span>
-      <h3>¿Cuántos jugadores tiene un equipo de fútbol en cancha?</h3>
-      <p>Editar pregunta →</p>
-    </li>
-    <li>
-      <span class="item-tag">Tecnología</span>
-      <h3>¿Qué significan las siglas HTTP?</h3>
-      <p>Editar pregunta →</p>
-    </li>
-    <li>
-      <span class="item-tag">Geografía</span>
-      <h3>¿Cuál es la capital de Baja California Sur?</h3>
-      <p>Editar pregunta →</p>
-    </li>
-    <li>
-      <span class="item-tag">Arte</span>
-      <h3>¿Quién pintó "La noche estrellada"?</h3>
-      <p>Editar pregunta →</p>
-    </li>
-  </ul>
+  <div class="question-grid">
+    {{questions}}
+  </div>
 </div>
