@@ -1,4 +1,5 @@
 import renderActiveLink from "../components/NavBar.js";
+import { BASE_URL } from "../config.js";
 
 // Router: solo reemplaza el contenido de <main id="app">. Nunca toca el shell.
 
@@ -65,7 +66,7 @@ export default class Router {
   }
 
   async render() {
-    const path = window.location.pathname.replace(/\/index\.html$/, "") || "/";
+    const path = window.location.pathname.replace(BASE_URL, "").replace(/\/index\.html$/, "") || "/";
 
     // 1. Se reemplaza el contenido actual por el skeleton
     this.root.innerHTML = this.getSkeletonHTML();
