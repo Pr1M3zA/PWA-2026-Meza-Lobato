@@ -1,0 +1,427 @@
+
+/* ----------------------------------------------------------- */
+/* CONTENIDO DINÁMICO - estilos de las vistas renderizadas      */
+/* por el router dentro de <main id="app">.                     */
+/* ----------------------------------------------------------- */
+
+body {
+  line-height: 1.6;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1rem;
+}
+
+.card h2,
+.card h3 {
+  color: #1e2761;
+  margin-bottom: 0.5rem;
+}
+
+.card a,
+.view-foot a {
+  color: #1e2761;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.card a:hover,
+.view-foot a:hover {
+  text-decoration: underline;
+}
+
+.meta-muted {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+/* ---------- Cabecera compartida por las vistas ---------- */
+.view-title {
+  font-size: 1.5rem;
+  color: #1e2761;
+  margin-bottom: 0.375rem;
+}
+
+.view-lead {
+  font-size: 1rem;
+  color: var(--text-main);
+  margin-bottom: 1.25rem;
+}
+
+.view-foot {
+  margin-top: 1.5rem;
+  font-size: 0.9375rem;
+}
+
+/* -----------------------------------------------------------
+   VISTA: INICIO - mobile first
+   ≥640px: 2 columnas | ≥1024px: 4 columnas.
+   ----------------------------------------------------------- */
+.home-hero h2 {
+  font-size: 1.5rem;
+  color: #1e2761;
+}
+
+.home-hero p {
+  font-size: 1rem;
+  color: var(--text-main);
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* móvil: 1 columna */
+  gap: 1rem;
+}
+
+.home-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  background: var(--card-bg);
+  border: 1px solid #e5e7eb;
+  border-left: 0.375rem solid var(--shell-bg);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  color: var(--text-main);
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.home-card:hover {
+  transform: translateY(-3px);
+}
+
+.home-card h3 {
+  font-size: 1.125rem;
+  color: #1e2761;
+}
+
+.home-card p {
+  font-size: 0.9375rem;
+}
+
+.home-card span {
+  margin-top: 0.375rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #1e3861;
+}
+
+/* Tablet: 2 columnas */
+@media (min-width: 640px) {
+  .home-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop: 4 columnas */
+@media (min-width: 1024px) {
+  .home-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* -----------------------------------------------------------
+   VISTAS: EDITAR + PREGUNTAS + GRUPOS - mobile first
+   ≥640px: 2 columnas | ≥1024px: 3 columnas.
+   ----------------------------------------------------------- */
+.sub-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* móvil: una columna */
+  gap: 1rem;
+}
+
+.sub-card {
+  display: block;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  color: var(--text-main);
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+}
+
+.sub-card:hover {
+  transform: translateY(-3px);
+}
+
+.sub-card h3 {
+  color: #1e2761;
+  font-size: 1.125rem;
+  margin-bottom: 0.375rem;
+}
+
+.sub-card p {
+  font-size: 0.9375rem;
+  margin: 0;
+}
+
+/* Lista de ítems (Preguntas / Grupos) */
+.item-list {
+  list-style: none;
+}
+
+.item-list li {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.item-list li h3 {
+  font-size: 1.0625rem;
+  color: #1e2761;
+  margin-bottom: 0.25rem;
+}
+
+.item-list li p {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.item-tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #599bd1;
+  background: #f0f8ff;
+  border-radius: 12px;
+  padding: 0.2rem 0.6rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Tablet: 2 columnas */
+@media (min-width: 640px) {
+  .sub-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .item-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .item-list li {
+    margin-bottom: 0;
+  }
+}
+
+/* Desktop: 3 columnas */
+@media (min-width: 1024px) {
+  .sub-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .item-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* -----------------------------------------------------------
+   VISTA: TABLEROS + DETALLE - mobile first
+   Base: 1 columna | ≥640px: 2 columnas | ≥1024px: 3 columnas.
+   ----------------------------------------------------------- */
+
+/* Grid de casillas: base = 1 columna (móvil) */
+.tile-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.tile-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin-bottom: 0;
+}
+
+.tile-item .tile-badge {
+  align-self: flex-start;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #599bd1;
+  background: #f0f8ff;
+  border-radius: 12px;
+  padding: 0.2rem 0.6rem;
+}
+
+.tile-item .tile-name {
+  font-size: 1.125rem;
+  color: #1e2761;
+  margin: 0;
+}
+
+.tile-item .tile-meta {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.tile-item .tile-link {
+  margin-top: 0.5rem;
+  font-weight: 600;
+  color: #1e3861;
+  text-decoration: none;
+}
+
+.tile-item .tile-link:hover {
+  text-decoration: underline;
+}
+
+/* Tablet: 2 columnas */
+@media (min-width: 640px) {
+  .tile-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop: 3 columnas */
+@media (min-width: 1024px) {
+  .tile-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Detalle de casilla (ruta /tile/:id) */
+.tile-detail {
+  max-width: 42rem;
+}
+
+.tile-detail dl {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.375rem;
+  margin: 0.75rem 0;
+}
+
+.tile-detail dt {
+  font-weight: 600;
+  color: #1e2761;
+}
+
+.tile-detail dd {
+  margin: 0;
+  color: var(--text-main);
+}
+
+.tile-detail .back-link {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-weight: 600;
+  color: #1e3861;
+  text-decoration: none;
+}
+
+.tile-detail .back-link:hover {
+  text-decoration: underline;
+}
+
+@media (min-width: 640px) {
+  .tile-detail dl {
+    grid-template-columns: 10rem 1fr;
+  }
+}
+
+/* -----------------------------------------------------------
+   VISTA: CONFIGURACIÓN - mobile first
+   Base: filas apiladas | ≥640px: campos en dos columnas.
+   ----------------------------------------------------------- */
+.settings-list {
+  display: grid;
+  grid-template-columns: 1fr; /* móvil: una columna */
+  gap: 0.875rem;
+}
+
+.setting-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.setting-card h3 {
+  font-size: 1.0625rem;
+  color: #1e2761;
+  margin-bottom: 0.875rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin-bottom: 0.875rem;
+}
+
+.field:last-child {
+  margin-bottom: 0;
+}
+
+.field label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1e2761;
+}
+
+.field input,
+.field select {
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--text-main);
+  background: #f7f8fb;
+  border: 1px solid #d1d9e6;
+  border-radius: 0.5rem;
+  padding: 0.625rem;
+}
+
+.field input:focus,
+.field select:focus {
+  outline: 2px solid #1e3861;
+  outline-offset: 1px;
+}
+
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: 0.9375rem;
+  color: var(--text-main);
+}
+
+.check-row input {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.btn {
+  font-size: 1rem;
+  font-family: inherit;
+  font-weight: 600;
+  color: #ffffff;
+  background: #6599C3;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #4f7ba0;
+}
+
+/* Tablet/desktop: campos en 2 columnas */
+@media (min-width: 640px) {
+  .settings-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
