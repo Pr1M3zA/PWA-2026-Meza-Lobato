@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wlweb</title>
+  <link rel="icon" href="data:,">
+ 
+  <!-- Estilos del App Shell -->
+  <link rel="stylesheet" href="styles/shell.css" />
+  <!-- Estilos del contenido dinámico -->
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+
+  <!-- ----------------------------------------------------------- -->
+  <!-- APP SHELL: header (móvil) | sidebar (desktop) | footer (móvil). -->
+  <!-- El router solo reemplaza el contenido de <main id="app">.       -->
+  <!-- ----------------------------------------------------------- -->
+
+  <header class="app-header">  <!-- Solo visible en modo móvil (<640px) -->
+    <span class="app-user">Priscila Meza</span>
+    <div class="app-avatar" role="img" aria-label="Foto de perfil (placeholder)"></div>
+  </header>
+
+  <div class="app">
+    <aside class="app-sidebar">  <!-- Solo visible en modo desktop (>=640px) -->
+      <div class="sidebar-top">
+        <span class="app-user">Priscila Meza</span>
+        <div class="app-avatar" role="img" aria-label="Foto de perfil (placeholder)"></div>
+      </div>
+
+      <nav class="app-nav">
+        <a href="/PWA-2026-Meza-Lobato/Unidad%202%20-%20Ejercicio%201/" data-link>
+          <svg class="icon" aria-hidden="true"><use href="src/components/icons.svg#icon-home"></use></svg>
+          Inicio
+        </a>
+
+        <div class="nav-group">
+          <a href="/PWA-2026-Meza-Lobato/Unidad%202%20-%20Ejercicio%201/editar" data-link>
+            <svg class="icon" aria-hidden="true"><use href="src/components/icons.svg#icon-edit"></use></svg>
+            Editar
+          </a>
+          <a class="nav-sub" href="/PWA-2026-Meza-Lobato/Unidad%202%20-%20Ejercicio%201/editar/preguntas" data-link>Preguntas</a>
+          <a class="nav-sub" href="/PWA-2026-Meza-Lobato/Unidad%202%20-%20Ejercicio%201/editar/tableros" data-link>Tableros</a>
+          <a class="nav-sub" href="/PWA-2026-Meza-Lobato/Unidad%202%20-%20Ejercicio%201/editar/grupos" data-link>Grupos</a>
+        </div>
+
+        <a href="/PWA-2026-Meza-Lobato/Unidad%202%20-%20Ejercicio%201/configuracion" data-link>
+          <svg class="icon" aria-hidden="true"><use href="src/components/icons.svg#icon-config"></use></svg>
+          Configuración
+        </a>
+      </nav>
+    </aside>
+
+    <!-- El router reemplaza SOLO esto -->    
+    <main id="app">  
+      <div class="skeleton-card">  <!-- Skeleton inicial: mientras el router resuelve la primera vista -->
+        <div class="skeleton skeleton-title"></div>
+        <div class="skeleton skeleton-line"></div>
+        <div class="skeleton skeleton-line"></div>
+        <div class="skeleton skeleton-line short"></div>
+      </div>
+    </main>
+
+  </div>
+
+  <footer class="app-footer">   <!-- Solo visible en modo móvil (<640px) -->
+    <a href="/PWA-2026-Meza-Lobato/Unidad%202%20-%20Ejercicio%201/" data-link aria-label="Home" title="Home">
+      <svg class="icon" aria-hidden="true"><use href="src/components/icons.svg#icon-home"></use></svg>
+    </a>
+    <a href="/PWA-2026-Meza-Lobato/Unidad%202%20-%20Ejercicio%201/editar" data-link aria-label="Editar" title="Editar">
+      <svg class="icon" aria-hidden="true"><use href="src/components/icons.svg#icon-edit"></use></svg>
+    </a>
+    <a href="/PWA-2026-Meza-Lobato/Unidad%202%20-%20Ejercicio%201/configuracion" data-link aria-label="Configuración" title="Configuración">
+      <svg class="icon" aria-hidden="true"><use href="src/components/icons.svg#icon-config"></use></svg>
+    </a>
+  </footer>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
