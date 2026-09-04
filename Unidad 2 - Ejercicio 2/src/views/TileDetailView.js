@@ -1,28 +1,26 @@
 import { slugify } from "../utils/slugify.js";
 import loadTemplate from "../utils/templateLoader.js";
+import { getErrorMessage } from "../utils/errorMessage.js";
+import { importWithRetry } from "../utils/moduleLoader.js";
+import ErrorView from "./ErrorView.js";
 
 // Contenido dinámico: detalle de una casilla individual (ruta /tile/:id)
 
 export default async function TileDetailView(params) {
-  const { default: TilesService } = await import("../services/tilesService.js");
-  const service = new TilesService();
-
   let tile = null;
-  let error = null;
+  let errorMessage = null;
   try {
+    const { default: TilesService } = await importWithRetry(
+      new URL("../services/tilesService.js", import.meta.url).href
+    );
+    const service = new TilesService();
     tile = await service.getById(params.id);
   } catch (e) {
-    error = e.message;
+    errorMessage = getErrorMessage(e);
   }
 
-  if (error) {
-    return `
-      <div class="card">
-        <h2>Error al cargar la casilla</h2>
-        <p style="color:#b91c1c">${error}</p>
-        <a href="/editar/tableros" data-link>← Volver al tablero</a>
-      </div>
-    `;
+  if (errorMessage) {
+    return ErrorView({ message: errorMessage });
   }
 
   if (!tile) {

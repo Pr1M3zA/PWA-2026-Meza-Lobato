@@ -1,26 +1,24 @@
 import TileCard from "../components/TileCard.js";
 import loadTemplate from "../utils/templateLoader.js";
+import { getErrorMessage } from "../utils/errorMessage.js";
+import { importWithRetry } from "../utils/moduleLoader.js";
+import ErrorView from "./ErrorView.js";
 
 export default async function TablerosView() {
-  const { default: TilesService } = await import("../services/tilesService.js");
-  const service = new TilesService();
-
   let tiles = [];
-  let error = null;
+  let errorMessage = null;
   try {
+    const { default: TilesService } = await importWithRetry(
+      new URL("../services/tilesService.js", import.meta.url).href
+    );
+    const service = new TilesService();
     tiles = await service.getAll();
   } catch (e) {
-    error = e.message;
+    errorMessage = getErrorMessage(e);
   }
 
-  if (error) {
-    return `
-      <div class="card">
-        <h2>Error al cargar las casillas</h2>
-        <p style="color:#b91c1c">${error}</p>
-        <a href="/" data-link>← Volver al inicio</a>
-      </div>
-    `;
+  if (errorMessage) {
+    return ErrorView({ message: errorMessage });
   }
 
   const html = await loadTemplate("tableros.html", import.meta.url);

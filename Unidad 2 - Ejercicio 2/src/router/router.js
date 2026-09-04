@@ -20,7 +20,12 @@ export default class Router {
   constructor(routes, rootElement) {
     this.routes = routes;
     this.root = rootElement;
+    this.lastRenderFailed = false;
     window.addEventListener("popstate", () => this.render());
+    // Al recuperar la conexión, re-ejecuta la vista
+    window.addEventListener("online", () => {
+      if (this.lastRenderFailed) this.render();
+    });
 
     document.addEventListener("click", (event) => {
       const link = event.target.closest("[data-link]");
@@ -70,6 +75,7 @@ export default class Router {
 
     // 1. Se reemplaza el contenido actual por el skeleton
     this.root.innerHTML = this.getSkeletonHTML();
+    this.lastRenderFailed = false;
     // 2. Reflejamos la ruta activa en header / footer / sidebar del shell
     renderActiveLink(path);
     // 3. Latencia simulada 
@@ -90,6 +96,8 @@ export default class Router {
     const html = await match.route.view(match.params);
     // 5. Solo aquí se escribe contenido nuevo dentro del shell
     this.root.innerHTML = html;
+    // Marca de error para que el listener "online" sepa si debe re-renderizar
+    this.lastRenderFailed = this.root.querySelector(".error-state") !== null;
 
     document.title = `Wires&Ladders - ${TITLES[path] ?? path.replace(/^\//, "")}`;
   }

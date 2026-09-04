@@ -553,3 +553,38 @@ body {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* -----------------------------------------------------------
+   ESTADO DE ERROR (reutilizable para todas las vistas)
+   ----------------------------------------------------------- */
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 3rem 1rem;
+  gap: 0.75rem;
+  max-width: 30rem;
+  margin: 2rem auto;
+}
+
+.error-state__icon {
+  width: 4rem;
+  height: 4rem;
+  color: #9ca3af;
+  opacity: 0.9;
+}
+
+.error-state__title {
+  font-size: 1.5rem;
+  color: #1e2761;
+  font-weight: 700;
+  margin: 0;
+}
+
+.error-state__message {
+  font-size: 1rem;
+  color: var(--text-main);
+  line-height: 1.5;
+  margin: 0;
+}

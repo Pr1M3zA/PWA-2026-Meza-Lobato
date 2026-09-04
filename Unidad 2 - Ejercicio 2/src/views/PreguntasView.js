@@ -1,28 +1,24 @@
 import loadTemplate from "../utils/templateLoader.js";
 import QuestionCard from "../components/QuestionCard.js";
+import { getErrorMessage } from "../utils/errorMessage.js";
+import { importWithRetry } from "../utils/moduleLoader.js";
+import ErrorView from "./ErrorView.js";
 
 export default async function PreguntasView() {
-  const { default: EducationService } = await import(
-    "../services/educationService.js"
-  );
-  const service = new EducationService();
-
   let questions = [];
-  let error = null;
+  let errorMessage = null;
   try {
+    const { default: EducationService } = await importWithRetry(
+      new URL("../services/educationService.js", import.meta.url).href
+    );
+    const service = new EducationService();
     questions = await service.getAll();
   } catch (e) {
-    error = e.message;
+    errorMessage = getErrorMessage(e);
   }
 
-  if (error) {
-    return `
-      <div class="card">
-        <h2>Error al cargar las preguntas</h2>
-        <p style="color:#b91c1c">${error}</p>
-        <a href="/" data-link>← Volver al inicio</a>
-      </div>
-    `;
+  if (errorMessage) {
+    return ErrorView({ message: errorMessage });
   }
 
   const html = await loadTemplate("preguntas.html", import.meta.url);
