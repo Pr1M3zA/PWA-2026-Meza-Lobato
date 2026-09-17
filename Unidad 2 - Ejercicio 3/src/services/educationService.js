@@ -1,9 +1,9 @@
 import ApiClient from "./apiClient.js";
 
-const client = new ApiClient("https://wires-and-ladders-api.vercel.app/sync");
+const client = new ApiClient("https://wires-and-ladders-api.vercel.app");
 export default class EducationService {
   async getAll() {
-    const res = await client.get("education");
+    const res = await client.get("sync/edu-info-questions");
     if (!res.ok) {
       const err = new Error(`HTTP ${res.status}`);
       err.status = res.status;

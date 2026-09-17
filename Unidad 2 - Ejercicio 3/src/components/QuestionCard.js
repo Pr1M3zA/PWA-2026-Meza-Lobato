@@ -1,7 +1,7 @@
 const ANSWER_COLORS = { 1: "blue", 2: "red", 3: "green", 4: "yellow"};
 
 export default function QuestionCard(question) {
-  const { generation, theme, information } = question;
+  const { subtopic, information } = question;
   const answers = [
     { letter: "A", color: "blue", text: question.answer_1 },
     { letter: "B", color: "red", text: question.answer_2 },
@@ -20,8 +20,7 @@ export default function QuestionCard(question) {
   return `
     <article class="card question-card">
       <div class="question-chips">
-        <span class="item-tag">${theme}</span>
-        <span class="item-tag">Generación ${generation}</span>
+        <span class="item-tag">${subtopic}</span>
       </div>
       <p class="question-info">${information}</p>
       <h3 class="question-text">${question.question}</h3>
