@@ -1,4 +1,20 @@
-<div class="config-view">
+<section id="login-section" class="card login-card" hidden>
+  <h2 class="login-title">Iniciar sesión</h2>
+  <form id="login-form" class="login-form" novalidate>
+    <div class="field">
+      <label for="login-id">Usuario o correo</label>
+      <input id="login-id" type="text" autocomplete="username" required />
+    </div>
+    <div class="field">
+      <label for="login-password">Contraseña</label>
+      <input id="login-password" type="password" autocomplete="current-password" required />
+    </div>
+    <button type="submit" class="btn btn-login">Entrar</button>
+    <p id="login-error" class="login-error" hidden></p>
+  </form>
+</section>
+
+<section id="config-section" class="config-view" hidden>
   <h1 class="view-title">Configuración</h1>
   <p class="view-lead">Preferencias de tu perfil en el editor de tablero.</p>
 
@@ -6,39 +22,51 @@
     <section class="setting-card">
       <h3>Perfil</h3>
       <div class="field">
-        <label for="cfg-nombre">Nombre de usuario</label>
-        <input id="cfg-nombre" type="text" value="Priscila Meza" />
+        <label for="nombre">Nombre de usuario</label>
+        <input id="nombre" type="text" readonly />
       </div>
       <div class="field">
-        <label for="cfg-email">Correo electrónico</label>
-        <input id="cfg-email" type="email" value="prme_22@alu.uabcs.mx" />
+        <label for="email">Correo electrónico</label>
+        <input id="email" type="email" readonly />
       </div>
+      <p style="margin-top:1rem;">
+        <button id="logout-btn" class="btn btn-logout" type="button">Cerrar sesión</button>
+      </p>
     </section>
 
     <section class="setting-card">
-      <h3>Preferencias</h3>
-      <div class="field">
-        <label for="cfg-tema">Tema de la interfaz</label>
-        <select id="cfg-tema">
-          <option>Claro</option>
-          <option>Oscuro</option>
-          <option>Sistema</option>
-        </select>
-      </div>
-      <div class="field check-row">
-        <input id="cfg-notif" type="checkbox" checked />
-        <label for="cfg-notif">Recibir notificaciones</label>
-      </div>
+      <h3>Almacenamiento del navegador</h3>
+      <p class="meta-muted">Demostración de los 3 mecanismos de almacenamiento del navegador.</p>
+      <p id="warning" class="meta-muted" hidden></p>
+      <ul class="diagnostic-list">
+        <li class="diagnostic-row">
+          <div class="diagnostic-info">
+            <span class="diagnostic-label">localStorage</span>
+            <span class="diagnostic-value" id="local">—</span>
+          </div>
+          <button class="btn btn-logout" type="button" data-clear="local">Limpiar</button>
+        </li>
+        <li class="diagnostic-row">
+          <div class="diagnostic-info">
+            <span class="diagnostic-label">sessionStorage</span>
+            <span class="diagnostic-value" id="session">—</span>
+          </div>
+          <button class="btn btn-logout" type="button" data-clear="session">Limpiar</button>
+        </li>
+        <li class="diagnostic-row">
+          <div class="diagnostic-info">
+            <span class="diagnostic-label">Cookie</span>
+            <span class="diagnostic-value" id="cookie">—</span>
+          </div>
+          <button class="btn btn-logout" type="button" data-clear="cookie">Limpiar</button>
+        </li>
+      </ul>
     </section>
   </div>
-
-  <p style="margin-top:1rem;">
-    <button class="btn" type="button">Guardar cambios</button>
-  </p>
 
   <p class="view-foot">
     <a href="/acerca" data-link>Acerca de este sitio</a>
     |
     <a href="/contacto" data-link>Contacto</a>
   </p>
-</div>
+</section>

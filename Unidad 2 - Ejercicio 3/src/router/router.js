@@ -1,10 +1,32 @@
 import renderActiveLink from "../components/NavBar.js";
 import { BASE_URL } from "../config.js";
+import { isAuthenticated } from "../services/authService.js";
 
 // Router: solo reemplaza el contenido de <main id="app">. Nunca toca el shell.
 
 // Latencia simulada para que el skeleton sea visible al navegar.
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Rutas accesibles solo para usuarios autenticados. Un usuario no autenticado que intente
+// entrar a alguna de estas es redirigido a /configuracion 
+const PROTECTED_PREFIXES = ["/editar", "/tile/"];
+function isProtected(path) {
+  if (path === "/") return true;
+  return PROTECTED_PREFIXES.some((p) => path === p || path.startsWith(p));
+}
+
+// Convierte cualquier URL (con/sin origin, con/sin encoding, con/sin index.html)
+// a la ruta interna consistente. Usada por el click handler y por render()
+// para que ambos calculen el mismo path.
+function normalizePath(href) {
+  let pathname;
+  try {
+    pathname = new URL(href, window.location.href).pathname;
+  } catch {
+    pathname = href;
+  }
+  return pathname.replace(BASE_URL, "").replace(/\/index\.html$/, "") || "/";
+}
 
 const TITLES = {
   "/": "Inicio",
@@ -71,14 +93,19 @@ export default class Router {
   }
 
   async render() {
-    const path = window.location.pathname.replace(BASE_URL, "").replace(/\/index\.html$/, "") || "/";
+    const path = normalizePath(window.location.pathname);
+    
+    if (isProtected(path) && !isAuthenticated()) {
+      window.history.replaceState({}, "", `/${BASE_URL}/configuracion`);
+      return this.render();
+    }
 
     // 1. Se reemplaza el contenido actual por el skeleton
     this.root.innerHTML = this.getSkeletonHTML();
     this.lastRenderFailed = false;
     // 2. Reflejamos la ruta activa en header / footer / sidebar del shell
     renderActiveLink(path);
-    // 3. Latencia simulada 
+    // 3. Latencia simulada
     await delay(400);
 
     const match = this.matchRoute(path);
