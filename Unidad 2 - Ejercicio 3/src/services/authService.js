@@ -27,15 +27,25 @@ export function getCurrentUser() {
 
 export async function login(identifier, password) {
   const res = await client.post("users/login", { identifier, password });
-  if (!res.ok) {
-    const err = new Error(`HTTP ${res.status}`);
-    err.status = res.status;
-    throw err;
+  let body = {};
+  try {
+    body = await res.json();
+  } catch {
   }
-  const { token } = await res.json();
-  setCookie(TOKEN_COOKIE, token, TOKEN_DAYS);
-  await fetchUser();
-  return currentUser;
+
+  if (body && typeof body === "object" && body.token) {
+    setCookie(TOKEN_COOKIE, body.token, TOKEN_DAYS);
+    await fetchUser();
+    return currentUser;
+  }
+
+  const serverMessage =
+    (body && typeof body === "object" && (body.message || body.error)) || "";
+  const err = new Error(serverMessage || `HTTP ${res.status}`);
+  err.status = res.status;
+  err.context = "login";
+  err.serverMessage = serverMessage;
+  throw err;
 }
 
 export async function fetchUser() {

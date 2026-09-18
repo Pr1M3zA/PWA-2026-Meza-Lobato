@@ -140,7 +140,21 @@ export default async function ConfigView() {
       const identifier = document.getElementById("login-id").value.trim();
       const password = document.getElementById("login-password").value;
 
-      if (!identifier || !password) return;
+      if (!identifier && !password) {
+        errorEl.textContent = "Introduce tu usuario y contraseña";
+        errorEl.hidden = false;
+        return;
+      }
+      if (!identifier) {
+        errorEl.textContent = "Introduce tu usuario o correo";
+        errorEl.hidden = false;
+        return;
+      }
+      if (!password) {
+        errorEl.textContent = "Introduce tu contraseña";
+        errorEl.hidden = false;
+        return;
+      }
       errorEl.hidden = true;
       submitBtn.disabled = true;
       submitBtn.textContent = "Entrando…";

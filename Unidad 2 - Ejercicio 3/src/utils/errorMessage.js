@@ -1,4 +1,7 @@
 export function getErrorMessage(e) {
+  if (e.context === "login") {
+    return e.serverMessage || "Contraseña incorrecta";
+  }
   if (e.status) {
     return `El servidor respondió con un error (${e.status}). Por favor, inténtalo más tarde.`;
   }
