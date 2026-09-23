@@ -4,6 +4,9 @@ import { isAuthenticated } from "../services/authService.js";
 
 // Router: solo reemplaza el contenido de <main id="app">. Nunca toca el shell.
 
+// Evento dedicado para refrescar la vista actual sin tocar la URL.
+export const REFRESH_VIEW_EVENT = "wl:router-refresh";
+
 // Latencia simulada para que el skeleton sea visible al navegar.
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -43,7 +46,10 @@ export default class Router {
     this.routes = routes;
     this.root = rootElement;
     this.lastRenderFailed = false;
+    this.rendering = false;
+    this.pendingRender = false;
     window.addEventListener("popstate", () => this.render());
+    window.addEventListener(REFRESH_VIEW_EVENT, () => this.render());
     // Al recuperar la conexión, re-ejecuta la vista
     window.addEventListener("online", () => {
       if (this.lastRenderFailed) this.render();
@@ -92,41 +98,62 @@ export default class Router {
     return null;
   }
 
-  async render() {
-    const path = normalizePath(window.location.pathname);
-    
-    if (isProtected(path) && !isAuthenticated()) {
-      window.history.replaceState({}, "", `/${BASE_URL}/configuracion`);
-      return this.render();
-    }
-
-    // 1. Se reemplaza el contenido actual por el skeleton
-    this.root.innerHTML = this.getSkeletonHTML();
-    this.lastRenderFailed = false;
-    // 2. Reflejamos la ruta activa en header / footer / sidebar del shell
-    renderActiveLink(path);
-    // 3. Latencia simulada
-    await delay(400);
-
-    const match = this.matchRoute(path);
-
-    // 4. Resolución de la vista (404 cuando match es null)
-    if (!match) {
-      const { default: NotFoundView } = await import(
-        "../views/NotFoundView.js"
-      );
-      this.root.innerHTML = await NotFoundView();
-      document.title = "Wires&Ladders — 404";
+  async render(_depth = 0) {
+    // Evita loops infinitos cuando el redirect de rutas protegidas rebota.
+    if (_depth > 5) {
+      console.error("[Router] demasiados redirects, abortando render");
       return;
     }
 
-    const html = await match.route.view(match.params);
-    // 5. Solo aquí se escribe contenido nuevo dentro del shell
-    this.root.innerHTML = html;
-    // Marca de error para que el listener "online" sepa si debe re-renderizar
-    this.lastRenderFailed = this.root.querySelector(".error-state") !== null;
+    // Si ya hay un render en vuelo, encola el siguiente para evitar que se pisen.
+    if (this.rendering) {
+      this.pendingRender = true;
+      return;
+    }
+    this.rendering = true;
 
-    document.title = `Wires&Ladders - ${TITLES[path] ?? path.replace(/^\//, "")}`;
+    try {
+      const path = normalizePath(window.location.pathname);
+
+      if (isProtected(path) && !isAuthenticated()) {
+        window.history.replaceState({}, "", `/${BASE_URL}/configuracion`);
+        return this.render(_depth + 1);
+      }
+
+      // 1. Se reemplaza el contenido actual por el skeleton
+      this.root.innerHTML = this.getSkeletonHTML();
+      this.lastRenderFailed = false;
+      // 2. Reflejamos la ruta activa en header / footer / sidebar del shell
+      renderActiveLink(path);
+      // 3. Latencia simulada
+      await delay(400);
+
+      const match = this.matchRoute(path);
+
+      // 4. Resolución de la vista (404 cuando match es null)
+      if (!match) {
+        const { default: NotFoundView } = await import(
+          "../views/NotFoundView.js"
+        );
+        this.root.innerHTML = await NotFoundView();
+        document.title = "Wires&Ladders — 404";
+        return;
+      }
+
+      const html = await match.route.view(match.params);
+      // 5. Solo aquí se escribe contenido nuevo dentro del shell
+      this.root.innerHTML = html;
+      // Marca de error para que el listener "online" sepa si debe re-renderizar
+      this.lastRenderFailed = this.root.querySelector(".error-state") !== null;
+
+      document.title = `Wires&Ladders - ${TITLES[path] ?? path.replace(/^\//, "")}`;
+    } finally {
+      this.rendering = false;
+      if (this.pendingRender) {
+        this.pendingRender = false;
+        this.render();
+      }
+    }
   }
 
   init() {

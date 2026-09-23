@@ -1,6 +1,7 @@
 import Router from "./router/router.js";
 import { initTheme } from "./services/themeService.js";
 import { initAuth } from "./services/authService.js";
+import { initActivityLogger } from "./services/activityLogger.js";
 import mountUserShell from "./components/UserShell.js";
 import HomeView from "./views/HomeView.js";
 import EditView from "./views/EditView.js";
@@ -28,6 +29,7 @@ const app = document.getElementById("app");
 const router = new Router(routes, app);
 
 await initAuth();
+initActivityLogger();
 mountUserShell();
 initTheme();
 

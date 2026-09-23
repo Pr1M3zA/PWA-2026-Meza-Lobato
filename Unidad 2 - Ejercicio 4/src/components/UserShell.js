@@ -35,5 +35,5 @@ function applyUserToShell(user) {
 
 export default function mountUserShell() {
   applyUserToShell(getCurrentUser());
-  subscribe(applyUserToShell);
+  subscribe(({ user }) => applyUserToShell(user));
 }

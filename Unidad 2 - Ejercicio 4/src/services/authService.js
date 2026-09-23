@@ -9,8 +9,8 @@ const client = new ApiClient("https://wires-and-ladders-api.vercel.app");
 
 let currentUser = null;
 
-function emit(user) {
-  window.dispatchEvent(new CustomEvent(AUTH_EVENT, { detail: { user } }));
+function emit(detail) {
+  window.dispatchEvent(new CustomEvent(AUTH_EVENT, { detail }));
 }
 
 export function getToken() {
@@ -35,7 +35,7 @@ export async function login(identifier, password) {
 
   if (body && typeof body === "object" && body.token) {
     setCookie(TOKEN_COOKIE, body.token, TOKEN_DAYS);
-    await fetchUser();
+    await fetchUser(identifier);
     return currentUser;
   }
 
@@ -48,11 +48,11 @@ export async function login(identifier, password) {
   throw err;
 }
 
-export async function fetchUser() {
+export async function fetchUser(identifier = null) {
   const token = getToken();
   if (!token) {
     currentUser = null;
-    emit(null);
+    emit({ user: null, identifier });
     return null;
   }
   const res = await client.get("users/user", token);
@@ -66,18 +66,18 @@ export async function fetchUser() {
   }
   const json = await res.json();
   currentUser = json?.userRow?.[0] ?? null;
-  emit(currentUser);
+  emit({ user: currentUser, identifier });
   return currentUser;
 }
 
 export function logout() {
   deleteCookie(TOKEN_COOKIE);
   currentUser = null;
-  emit(null);
+  emit({ user: null });
 }
 
 export function subscribe(fn) {
-  const handler = (e) => fn(e.detail.user);
+  const handler = (e) => fn(e.detail);
   window.addEventListener(AUTH_EVENT, handler);
   return () => window.removeEventListener(AUTH_EVENT, handler);
 }
