@@ -1,0 +1,391 @@
+
+/* ----------------------------------------------------------- */
+/* APP SHELL - estructura fija del SPA.                          */
+/* Header (móvil), sidebar (desktop), footer (móvil).            */
+/* ----------------------------------------------------------- */
+
+:root {
+  --shell-bg: #6599C3;
+  --shell-text: #ffffff;
+  --shell-text-muted: #cadcfc;
+  --bg-main: #f7f8fb;
+  --text-main: #3d638f;
+  --card-bg: #ffffff;
+  --radius: 10px;
+  --font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --heading-color: #1e2761;
+  --link-color: #1e3861;
+  --muted-color: #6b7280;
+  --tag-color: #599bd1;
+  --tag-bg: #f0f8ff;
+  --input-bg: #f7f8fb;
+  --input-border: #d1d9e6;
+  --card-border: #e5e7eb;
+  --error-icon: #9ca3af;
+
+  --answer-blue-color:  #4A90B8; --answer-blue-bg:  #f0f7fc; --answer-blue-text:  #1e3861;
+  --answer-red-color:   #C26A6A; --answer-red-bg:   #fcf3f3; --answer-red-text:   #7a2929;
+  --answer-green-color: #5FA15F; --answer-green-bg: #f3faf3; --answer-green-text: #2c5a2c;
+  --answer-yellow-color:#D4B254; --answer-yellow-bg:#fcf9ef; --answer-yellow-text:#6b5318;
+
+  --btn-bg-hover: #4f7ba0;
+
+  --skeleton-from: #e2e8f0;
+  --skeleton-to:   #f1f5f9;
+}
+
+/* Tema oscuro */
+[data-theme="dark"] {
+  --shell-bg: #1e3a5f;
+  --shell-text: #ffffff;
+  --shell-text-muted: #9bb8d9;
+  --bg-main: #0a1a30;
+  --text-main: #d6e5f5;
+  --card-bg: #16294a;
+
+  --heading-color: #e8f1fb;
+  --link-color:    #7eb8f5;
+  --muted-color:   #8fa6c4;
+  --tag-color:     #7eb8f5;
+  --tag-bg:        #334155;
+  --input-bg:      #0a1a30;
+  --input-border:  #2a3f60;
+  --card-border:   #2a3f60;
+  --error-icon:    #d6e5f5;
+
+  --answer-blue-color:  #60a5fa; --answer-blue-bg:  #1e3a5f; --answer-blue-text:  #bfdbfe;
+  --answer-red-color:   #f87171; --answer-red-bg:   #5f1f1f; --answer-red-text:   #fecaca;
+  --answer-green-color: #4ade80; --answer-green-bg: #1f3f2c; --answer-green-text: #bbf7d0;
+  --answer-yellow-color:#facc15; --answer-yellow-bg:#3f3318; --answer-yellow-text:#fde68a;
+
+  --btn-bg-hover: #3b82f6;
+
+  --skeleton-from: #16294a;
+  --skeleton-to:   #2a3f60;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  font-family: var(--font-family);
+  color: var(--text-main);
+  background: var(--bg-main);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* ---------- Contenedor general del shell ----------*/
+.app {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- MODO MÓVIL: header superior ----------*/
+.app-header {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  padding: 0.875rem 1.25rem;
+  background: var(--shell-bg);
+  color: var(--shell-text);
+}
+
+#app-user-name {
+  font-size: 1rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#app-avatar-img {
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  overflow: hidden;
+}
+
+#app-avatar-img.has-image {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+#app-avatar-img.has-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+/* Selector circular de tema (claro/oscuro). */
+.theme-toggle {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--shell-text);
+  cursor: pointer;
+  padding: 0;
+  margin-left: auto;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+.theme-toggle:hover  { background: rgba(255, 255, 255, 0.22); }
+.theme-toggle:active { transform: scale(0.94); }
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--shell-text);
+  outline-offset: 2px;
+}
+
+/* Swap de íconos del toggle vía CSS: ambos <use> existen siempre,
+   solo cambia la visibilidad según el tema. */
+.theme-icon-sun  { display: none; }
+.theme-icon-moon { display: inline; }
+[data-theme="dark"] .theme-icon-sun  { display: inline; }
+[data-theme="dark"] .theme-icon-moon { display: none; }
+
+/* ---------- Formulario de login (dentro de /configuracion) ----------*/
+.login-card {
+  max-width: 28rem;
+  margin: 1rem auto;
+}
+.login-title {
+  color: var(--heading-color);
+  margin-bottom: 0.5rem;
+}
+.login-form {
+  margin-top: 1rem;
+}
+.btn-login {
+  width: 100%;
+}
+.login-error {
+  margin-top: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.5rem;
+  background: rgba(194, 106, 106, 0.12);
+  border: 1px solid var(--answer-red-color);
+  color: var(--answer-red-text);
+  font-size: 0.9375rem;
+}
+
+/* Botón "Cerrar sesión" */
+.btn-logout {
+  background: transparent;
+  color: var(--link-color);
+  border: 1px solid var(--card-border);
+}
+.btn-logout:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--link-color);
+}
+[data-theme="dark"] .btn-logout:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ---------- MODO MÓVIL: contenido central ----------*/
+main#app {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1.25rem 1rem;
+}
+
+/* ---------- MODO MÓVIL: footer barra de menú (iconos) ---------- */
+.app-footer {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0.375rem 0 calc(0.375rem + env(safe-area-inset-bottom, 0));
+  background: var(--shell-bg);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.app-footer a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  color: var(--shell-text-muted);
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.app-footer a:hover,
+.app-footer a.active {
+  color: var(--shell-text);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: block;
+}
+
+/* ---------- MODO MÓVIL: sidebar oculto ---------- */
+.app-sidebar {
+  display: none;
+}
+
+/* -----------------------------------------------------------
+   BREAKPOINT
+   Se ocultan el header y el footer del modo móvil.
+   ----------------------------------------------------------- */
+@media (min-width: 640px) {
+  .app {
+    display: grid;
+    grid-template-columns: minmax(12rem, 20%) 1fr;
+  }
+
+  .app-header,
+  .app-footer {
+    display: none;
+  }
+
+  main#app {
+    padding: 2rem;
+  }
+
+  /* ---------- Sidebar ---------- */
+  .app-sidebar {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow-y: auto;
+    background: var(--shell-bg);
+    color: var(--shell-text);
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .sidebar-top {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.75rem;
+    padding: 1.25rem 1rem;
+  }
+
+  .app-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0 0.625rem 1.5rem;
+  }
+
+  .nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .app-nav a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--shell-text-muted);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    padding: 0.625rem 0.875rem;
+    border-radius: 0.5rem;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .app-nav a .icon {
+    flex: none;
+  }
+
+  .app-nav a:hover,
+  .app-nav a.active {
+    color: var(--shell-text);
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  .app-nav a.nav-sub {
+    padding-left: 1.75rem;
+    font-weight: 500;
+  }
+
+  .app-nav a.nav-sub::before {
+    content: "▸ ";
+    color: rgba(202, 220, 252, 0.6);
+  }
+}
+
+/* -----------------------------------------------------------
+   SKELETON LOADER (estado de carga del contenido)
+   Visible mientras el router resuelve la vista actual.
+   ----------------------------------------------------------- */
+.skeleton-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-from) 25%,
+    var(--skeleton-to)   50%,
+    var(--skeleton-from) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+.skeleton-title {
+  height: 1.75rem;
+  width: 40%;
+  margin-bottom: 1.2rem;
+}
+
+.skeleton-line {
+  height: 1rem;
+  width: 100%;
+  margin-bottom: 0.75rem;
+}
+
+.skeleton-line.short {
+  width: 60%;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

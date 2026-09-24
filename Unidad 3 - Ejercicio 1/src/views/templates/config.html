@@ -1,0 +1,133 @@
+<section id="login-section" class="card login-card" hidden>
+  <h2 class="login-title">Iniciar sesión</h2>
+  <form id="login-form" class="login-form" novalidate>
+    <div class="field">
+      <label for="login-id">Usuario o correo</label>
+      <input id="login-id" type="text" autocomplete="username" required />
+    </div>
+    <div class="field">
+      <label for="login-password">Contraseña</label>
+      <input id="login-password" type="password" autocomplete="current-password" required />
+    </div>
+    <button type="submit" class="btn btn-login">Entrar</button>
+    <p id="login-error" class="login-error" hidden></p>
+  </form>
+</section>
+
+<section id="config-section" class="config-view" hidden>
+  <h1 class="view-title">Configuración</h1>
+  <p class="view-lead">Preferencias de tu perfil en el editor de tablero.</p>
+
+  <div class="settings-list">
+    <section class="setting-card">
+      <h3>Perfil</h3>
+      <div class="field">
+        <label for="nombre">Nombre de usuario</label>
+        <input id="nombre" type="text" readonly />
+      </div>
+      <div class="field">
+        <label for="email">Correo electrónico</label>
+        <input id="email" type="email" readonly />
+      </div>
+      <p style="margin-top:1rem;">
+        <button id="logout-btn" class="btn btn-logout" type="button">Cerrar sesión</button>
+      </p>
+    </section>
+
+    <section class="setting-card">
+      <h3>Almacenamiento del navegador</h3>
+      <p class="meta-muted">Demostración de los 3 mecanismos de almacenamiento del navegador.</p>
+      <p id="warning" class="meta-muted" hidden></p>
+      <ul class="diagnostic-list">
+        <li class="diagnostic-row">
+          <div class="diagnostic-info">
+            <span class="diagnostic-label">localStorage</span>
+            <span class="diagnostic-value" id="local">—</span>
+          </div>
+          <button class="btn btn-logout" type="button" data-clear="local">Limpiar</button>
+        </li>
+        <li class="diagnostic-row">
+          <div class="diagnostic-info">
+            <span class="diagnostic-label">sessionStorage</span>
+            <span class="diagnostic-value" id="session">—</span>
+          </div>
+          <button class="btn btn-logout" type="button" data-clear="session">Limpiar</button>
+        </li>
+        <li class="diagnostic-row">
+          <div class="diagnostic-info">
+            <span class="diagnostic-label">Cookie</span>
+            <span class="diagnostic-value" id="cookie">—</span>
+          </div>
+          <button class="btn btn-logout" type="button" data-clear="cookie">Limpiar</button>
+        </li>
+      </ul>
+    </section>
+
+    <section class="setting-card">
+      <h3>Registro de actividad (IndexedDB)</h3>
+
+      <div class="log-subcard">
+        <h4 class="log-subcard__title">Agregar evento</h4>
+        <form id="log-form" class="log-form" novalidate>
+          <div class="field">
+            <label for="log-action">Acción</label>
+            <select id="log-action" name="action" required>
+              <option value="" disabled selected hidden>Selecciona una acción</option>
+              <option value="Iniciar sesión">Iniciar sesión</option>
+              <option value="Cerrar sesión">Cerrar sesión</option>
+              <option value="Crear pregunta">Crear pregunta</option>
+              <option value="Editar pregunta">Editar pregunta</option>
+              <option value="Eliminar pregunta">Eliminar pregunta</option>
+              <option value="Crear tablero">Crear tablero</option>
+              <option value="Editar tablero">Editar tablero</option>
+              <option value="Eliminar tablero">Eliminar tablero</option>
+              <option value="Crear grupo">Crear grupo</option>
+              <option value="Editar grupo">Editar grupo</option>
+              <option value="Eliminar grupo">Eliminar grupo</option>
+              <option value="Sincronizar datos">Sincronizar datos</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="log-description">Descripción</label>
+            <input id="log-description" name="description" type="text"
+                   placeholder="Detalle breve de la acción" autocomplete="off" />
+          </div>
+          <button type="submit" class="btn">Agregar</button>
+          <p id="log-error" class="login-error" hidden></p>
+        </form>
+      </div>
+
+      <div class="log-subcard">
+        <h4 class="log-subcard__title">Consultar</h4>
+        <div class="log-controls">
+          <div class="field filter-field-inline">
+            <label for="log-action-filter">Filtrar por acción</label>
+            <select id="log-action-filter">
+              <option value="">Todas</option>
+              <option>Iniciar sesión</option>
+              <option>Cerrar sesión</option>
+              <option>Crear pregunta</option>
+              <option>Editar pregunta</option>
+              <option>Eliminar pregunta</option>
+              <option>Crear tablero</option>
+              <option>Editar tablero</option>
+              <option>Eliminar tablero</option>
+              <option>Crear grupo</option>
+              <option>Editar grupo</option>
+              <option>Eliminar grupo</option>
+              <option>Sincronizar datos</option>
+            </select>
+          </div>
+        </div>
+        <p id="log-empty" class="meta-muted" hidden>No hay registros aún.</p>
+        <ul id="log-list" class="log-list"></ul>
+      </div>
+    </section>
+  </div>
+
+  <p class="view-foot">
+    <a href="/acerca" data-link>Acerca de este sitio</a>
+    |
+    <a href="/contacto" data-link>Contacto</a>
+  </p>
+</section>
