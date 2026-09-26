@@ -12,6 +12,8 @@ import ConfigView from "./views/ConfigView.js";
 import AboutView from "./views/AboutView.js";
 import TileDetailView from "./views/TileDetailView.js";
 import ContactView from "./views/ContactView.js";
+import { registerServiceWorker, registerNarrowServiceWorker } from "./utils/registerSW.js";
+import ServiceWorkerView from "./views/ServiceWorkerView.js";
 
 const routes = [
   { path: "/", view: HomeView },
@@ -23,6 +25,7 @@ const routes = [
   { path: "/acerca", view: AboutView },
   { path: "/contacto", view: ContactView },
   { path: "/tile/:id", view: TileDetailView },
+  { path: "/configuracion/service-worker", view: ServiceWorkerView },
 ];
 
 const app = document.getElementById("app");
@@ -34,3 +37,13 @@ mountUserShell();
 initTheme();
 
 router.init();
+
+if (document.readyState === "complete") {
+  registerServiceWorker();
+  registerNarrowServiceWorker();
+} else {
+  window.addEventListener("load", () => {
+    registerServiceWorker();
+    registerNarrowServiceWorker();
+  }, { once: true });
+}
