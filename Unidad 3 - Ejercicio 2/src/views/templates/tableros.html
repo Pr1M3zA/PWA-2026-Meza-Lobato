@@ -1,0 +1,16 @@
+<div class="tableros-view">
+  <h1 class="view-title">Tablero</h1>
+  <p class="view-lead" id="tiles-count">{{countText}}</p>
+
+  <div class="field filter-field">
+    <label for="tile-type-filter">Filtrar por efecto</label>
+    <select id="tile-type-filter">
+      <option value="">Todas</option>
+      {{tileTypeOptions}}
+    </select>
+  </div>
+
+  <div class="tile-grid" id="tile-grid">
+    {{tiles}}
+  </div>
+</div>
