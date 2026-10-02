@@ -17,7 +17,7 @@ import ConfigView from "./views/ConfigView.js";
 import AboutView from "./views/AboutView.js";
 import TileDetailView from "./views/TileDetailView.js";
 import ContactView from "./views/ContactView.js";
-import { registerServiceWorker, registerNarrowServiceWorker } from "./utils/registerSW.js";
+import { registerServiceWorker } from "./utils/registerSW.js";
 import ServiceWorkerView from "./views/ServiceWorkerView.js";
 
 const routes = [
@@ -50,10 +50,8 @@ router.init();
 
 if (document.readyState === "complete") {
   registerServiceWorker();
-  registerNarrowServiceWorker();
 } else {
   window.addEventListener("load", () => {
     registerServiceWorker();
-    registerNarrowServiceWorker();
   }, { once: true });
 }

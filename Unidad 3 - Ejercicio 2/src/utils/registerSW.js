@@ -4,10 +4,6 @@ export const SW_URL = `/${BASE_URL}/sw.js`;
 
 export const SW_SCOPE = `/${BASE_URL}/`;
 
-export const SW_NARROW_URL = `/${BASE_URL}/src/sw.js`;
-
-export const SW_NARROW_SCOPE = `/${BASE_URL}/src/`;
-
 export async function registerServiceWorker() {
 
   if (!("serviceWorker" in navigator)) {
@@ -19,7 +15,30 @@ export async function registerServiceWorker() {
     const registration = await navigator.serviceWorker.register(SW_URL, {
       scope: SW_SCOPE
     });
-    console.log("[PWA] SW (ancho) registrado con scope:", registration.scope);
+
+   if(registration.waiting) {
+      notifyUpdateAvailable(registration)
+    }
+
+    registration.addEventListener("updatefound", () => {
+      const newWorker = registration.installing;
+      if(!newWorker) return;
+
+      newWorker.addEventListener("statechange", () => {
+        if(newWorker.state === "installed" && navigator.serviceWorker.controller) {
+          notifyUpdateAvailable(registration)
+        }
+      })
+    })
+
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if(refreshing) return;
+
+      refreshing = true;
+      window.location.reload();
+    })
+
     return registration;
   } catch (error) {
     console.log("[PWA] Falló el registro del SW (ancho)", error);
@@ -28,22 +47,12 @@ export async function registerServiceWorker() {
 
 }
 
-export async function registerNarrowServiceWorker() {
+function notifyUpdateAvailable(registration) {
+  window.dispatchEvent(
+    new CustomEvent("sw-update-available", { detail: {registration}})
+  )
+}
 
-  if (!("serviceWorker" in navigator)) {
-    console.warn("[PWA] Este navegador no tiene soporte para service workers.")
-    return null;
-  }
-
-  try {
-    const registration = await navigator.serviceWorker.register(SW_NARROW_URL, {
-      scope: SW_NARROW_SCOPE
-    });
-    console.log("[PWA] SW (estrecho) registrado con scope:", registration.scope);
-    return registration;
-  } catch (error) {
-    console.log("[PWA] Falló el registro del SW (estrecho)", error);
-    return null;
-  }
-
+export function activateWaitingSW(registration) {
+  registration?.waiting?.postMessage("SKIP_WAITING");
 }

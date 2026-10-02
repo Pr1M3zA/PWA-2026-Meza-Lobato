@@ -734,32 +734,50 @@ body {
   border-bottom: none;
 }
 
-/* Tabla de scope (3 columnas) — solo espaciado/bordes */
-.sw-scope-table {
+/* Tablas de datos (scope, cachés, registros, ganador) — solo espaciado/bordes */
+.sw-scope-table,
+.sw-cache-table,
+.sw-registrations-table,
+.sw-winner-table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 1rem;
 }
 
 .sw-scope-table th,
-.sw-scope-table td {
+.sw-scope-table td,
+.sw-cache-table th,
+.sw-cache-table td,
+.sw-registrations-table th,
+.sw-registrations-table td,
+.sw-winner-table th,
+.sw-winner-table td {
   padding: 0.5rem 0.625rem;
   border-bottom: 1px solid var(--card-border);
   text-align: left;
   vertical-align: middle;
 }
 
-.sw-scope-table thead th {
+.sw-scope-table thead th,
+.sw-cache-table thead th,
+.sw-registrations-table thead th,
+.sw-winner-table thead th {
   color: var(--muted-color);
   font-weight: 600;
   font-size: 0.875rem;
 }
 
-.sw-scope-table tr:last-child td {
+.sw-scope-table tr:last-child td,
+.sw-cache-table tr:last-child td,
+.sw-registrations-table tr:last-child td,
+.sw-winner-table tr:last-child td {
   border-bottom: none;
 }
 
-.sw-scope-table code {
+.sw-scope-table code,
+.sw-cache-table code,
+.sw-registrations-table code,
+.sw-winner-table code {
   word-break: break-all;
 }
 
@@ -780,4 +798,77 @@ body {
   color: var(--text-main);
   font-size: 0.9375rem;
   min-height: 1.5rem;
+}
+
+/* Aviso de versión nueva pendiente de activar */
+.sw-update-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--answer-yellow-color);
+  border-radius: var(--radius);
+  background: var(--answer-yellow-bg);
+  color: var(--answer-yellow-text);
+  font-size: 0.9375rem;
+}
+
+.sw-update-banner button {
+  white-space: nowrap;
+}
+
+/* Ciclo de vida: chips installing → waiting → active */
+.sw-lifecycle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sw-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.375rem;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  background: var(--bg-main);
+  color: var(--muted-color);
+  font-size: 0.875rem;
+}
+
+.sw-chip strong {
+  font-weight: 600;
+  color: var(--heading-color);
+}
+
+.sw-chip--on {
+  border-color: var(--answer-green-color);
+  background: var(--answer-green-bg);
+  color: var(--answer-green-text);
+}
+
+.sw-chip--on strong {
+  color: var(--answer-green-text);
+}
+
+.sw-lifecycle-arrow {
+  color: var(--error-icon);
+}
+
+/* Contenido de cada caché: lista con scroll */
+.sw-cache-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  max-height: 9rem;
+  overflow-y: auto;
+}
+
+.sw-cache-list code {
+  font-size: 0.8125rem;
+  color: var(--muted-color);
 }
