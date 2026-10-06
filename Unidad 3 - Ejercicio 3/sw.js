@@ -9,7 +9,7 @@ console.log("[SW] typeof caches => ", typeof caches);
 
 console.log("[SW] Scope => ", self.registration.scope);
 
-const CACHE_VERSION = "wl-shell-v1"
+const CACHE_VERSION = "wl-shell-v2"
 
 const APP_SHELL = [
   "./",
