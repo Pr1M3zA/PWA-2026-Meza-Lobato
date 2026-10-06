@@ -1,0 +1,51 @@
+<section id="login-section" class="card login-card" hidden>
+  <h2 class="login-title">Iniciar sesión</h2>
+  <form id="login-form" class="login-form" novalidate>
+    <div class="field">
+      <label for="login-id">Usuario o correo</label>
+      <input id="login-id" type="text" autocomplete="username" required />
+    </div>
+    <div class="field">
+      <label for="login-password">Contraseña</label>
+      <input id="login-password" type="password" autocomplete="current-password" required />
+    </div>
+    <button type="submit" class="btn btn-login">Entrar</button>
+    <p id="login-error" class="login-error" hidden></p>
+  </form>
+</section>
+
+<section id="config-section" class="config-view" hidden>
+  <h1 class="view-title">Configuración</h1>
+  <p class="view-lead">Preferencias de tu perfil en el editor de tablero.</p>
+
+  <div class="settings-list">
+    <section class="setting-card">
+      <h3>Perfil</h3>
+      <div class="field">
+        <label for="nombre">Nombre de usuario</label>
+        <input id="nombre" type="text" readonly />
+      </div>
+      <div class="field">
+        <label for="email">Correo electrónico</label>
+        <input id="email" type="email" readonly />
+      </div>
+      <p style="margin-top:1rem;">
+        <button id="logout-btn" class="btn btn-logout" type="button">Cerrar sesión</button>
+      </p>
+    </section>
+
+  </div>
+
+  <p style="margin-top:0.875rem;">
+    <a href="/PWA-2026-Meza-Lobato/Unidad%203%20-%20Ejercicio%203/configuracion/service-worker"
+       class="btn btn-secundario"
+       data-link
+       role="button">Abrir diagnóstico del SW</a>
+  </p>
+
+  <p class="view-foot">
+    <a href="/acerca" data-link>Acerca de este sitio</a>
+    |
+    <a href="/contacto" data-link>Contacto</a>
+  </p>
+</section>

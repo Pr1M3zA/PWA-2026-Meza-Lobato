@@ -1,0 +1,16 @@
+<svg width="178" height="194" xmlns="http://www.w3.org/2000/svg">
+   <g>
+      <g stroke="white" stroke-width="3">
+         <polygon points="88,192 1,144 1,49 88,96" fill="#78bdf6" />
+         <polygon points="88,192 176,144 176,49 88,96" fill="#78bdf6" />
+         <polygon points="176,49 88,1 1,49 88,96" fill="#6599c3" />
+      </g>
+      <circle cx="46" cy="42" r="8" fill="white" />
+      <circle cx="71" cy="57" r="8" fill="white" />
+      <circle cx="96" cy="70" r="8" fill="white" />
+      <circle cx="80" cy="21" r="8" fill="white" />
+      <circle cx="105" cy="35" r="8" fill="white" />
+      <circle cx="130" cy="48" r="8" fill="white" />
+   </g>
+</svg>
+
