@@ -20,6 +20,7 @@ import TileDetailView from "./views/TileDetailView.js";
 import ContactView from "./views/ContactView.js";
 import { registerServiceWorker } from "./utils/registerSW.js";
 import ServiceWorkerView from "./views/ServiceWorkerView.js";
+import FetchLabView from "./views/FetchLabView.js";
 
 const routes = [
   { path: "/", view: HomeView },
@@ -37,6 +38,7 @@ const routes = [
   { path: "/contacto", view: ContactView },
   { path: "/tile/:id", view: TileDetailView },
   { path: "/configuracion/service-worker", view: ServiceWorkerView },
+  { path: "/configuracion/service-worker/fetch-cache", view: FetchLabView },
 ];
 
 const app = document.getElementById("app");
