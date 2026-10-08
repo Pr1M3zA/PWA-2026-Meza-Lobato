@@ -75,7 +75,14 @@ export default class Router {
   }
 
   navigate(path) {
-    window.history.pushState({}, "", path);
+    let target = path;
+    if (typeof path === "string" && path) {
+      const stripped = path.startsWith("/") ? path.slice(1) : path;
+      if (!stripped.startsWith(BASE_URL)) {
+        target = `/${BASE_URL}/${stripped}`;
+      }
+    }
+    window.history.pushState({}, "", target);
     this.render();
   }
 
