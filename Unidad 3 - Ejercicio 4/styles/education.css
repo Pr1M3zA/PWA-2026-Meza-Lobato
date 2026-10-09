@@ -1,0 +1,876 @@
+
+/* -----------------------------------------------------------
+   ESTILOS: MÓDULO EDUCATION
+   Vistas: Áreas del conocimiento, Disciplinas, Preguntas, Temas
+   ----------------------------------------------------------- */
+
+/* Vista: ÁREAS DEL CONOCIMIENTO - mobile first
+   Lista de tarjetas con ícono Material + nombre + descripción. */
+.areas-conocimiento-view {
+  max-width: 64rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.areas-conocimiento-view .view-section {
+  font-size: 0.8125rem;
+  color: var(--muted-color);
+  margin: 0 0 0.25rem;
+}
+
+.areas-conocimiento-view .view-title {
+  margin-bottom: 0.25rem;
+}
+
+.area-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  width: 100%;
+}
+
+.area-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 0.875rem 1.125rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  color: var(--text-main);
+  text-decoration: none;
+}
+
+.area-card:hover,
+.area-card:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  text-decoration: none;
+}
+
+.area-icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 12px;
+  color: #ffffff;
+}
+
+.area-icon .material-symbols-outlined {
+  font-size: 1.625rem;
+  line-height: 1;
+}
+
+.area-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.area-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--heading-color);
+  margin: 0 0 0.125rem;
+  line-height: 1.25;
+}
+
+.area-details {
+  font-size: 0.875rem;
+  color: var(--muted-color);
+  margin: 0;
+  line-height: 1.35;
+}
+
+.area-chevron {
+  flex: none;
+  color: var(--muted-color);
+  font-size: 1.5rem !important;
+  font-weight: 400 !important;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+/* Reset/base para todos los <span class="material-symbols-outlined"> */
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+/* Vista: DISCIPLINAS - mobile first
+   Lista de tarjetas con barra de color del área encima del nombre. */
+.disciplinas-view {
+  max-width: 64rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.disciplinas-view .view-section {
+  font-size: 0.8125rem;
+  color: var(--muted-color);
+  margin: 0 0 0.25rem;
+}
+
+.disciplinas-view .view-title {
+  margin-bottom: 0.25rem;
+}
+
+.discipline-list {
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.discipline-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 0.875rem 1.125rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  color: var(--text-main);
+  text-decoration: none;
+}
+
+.discipline-card:hover,
+.discipline-card:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  text-decoration: none;
+}
+
+.discipline-bar {
+  display: block;
+  width: 100%;
+  height: 6px;
+  margin: -0.875rem -1.125rem 0;
+}
+
+.discipline-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0;
+}
+
+.discipline-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.discipline-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--heading-color);
+  margin: 0 0 0.125rem;
+  line-height: 1.25;
+}
+
+.discipline-details {
+  font-size: 0.875rem;
+  color: var(--muted-color);
+  margin: 0;
+  line-height: 1.35;
+}
+
+.discipline-chevron {
+  flex: none;
+  color: var(--muted-color);
+  font-size: 1.5rem !important;
+}
+
+/* Vista: PREGUNTAS - mobile first
+   1col (vertical) en móvil, 2x2 en ≥640px. */
+.question-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.question-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  margin-bottom: 0;
+}
+
+.question-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.question-info {
+  font-size: 0.875rem;
+  color: var(--text-main);
+  background: var(--bg-main);
+  border-left: 3px solid var(--shell-bg);
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  margin: 0;
+}
+
+.question-text {
+  font-size: 1.0625rem;
+  color: var(--heading-color);
+  margin: 0.25rem 0 0.5rem;
+  line-height: 1.4;
+}
+
+/* Header de cada pregunta: chip subtopic + acciones en el mismo renglón */
+.question-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.question-header .item-tag {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  margin-bottom: 0;
+}
+
+.answer-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+.answer-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  border: 1.5px solid;
+  line-height: 1.3;
+}
+
+.answer-letter {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.625rem;
+  height: 1.625rem;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #ffffff;
+}
+
+.answer-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.answer-blue {
+  border-color: var(--answer-blue-color);
+  background: var(--answer-blue-bg);
+  color: var(--link-color);
+}
+.answer-blue .answer-letter {
+  background: var(--answer-blue-color);
+}
+
+.answer-red {
+  border-color: var(--answer-red-color);
+  background: var(--answer-red-bg);
+  color: var(--answer-red-text);
+}
+.answer-red .answer-letter {
+  background: var(--answer-red-color);
+}
+
+.answer-green {
+  border-color: var(--answer-green-color);
+  background: var(--answer-green-bg);
+  color: var(--answer-green-text);
+}
+.answer-green .answer-letter {
+  background: var(--answer-green-color);
+}
+
+.answer-yellow {
+  border-color: var(--answer-yellow-color);
+  background: var(--answer-yellow-bg);
+  color: var(--answer-yellow-text);
+}
+.answer-yellow .answer-letter {
+  background: var(--answer-yellow-color);
+}
+
+@media (min-width: 640px) {
+  .question-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .answer-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .question-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Header sticky de PreguntasView: breadcrumb + título + lead
+   quedan fijos arriba; solo el grid de cards hace scroll. */
+.preguntas-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg-main);
+  padding-top: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--card-border);
+  margin-bottom: 1rem;
+}
+
+/* Vista: TEMAS - mobile first
+   Header con título + botón agregar a la derecha.
+   Toolbar (solo level filter) + grid 1/2/3 columnas de topics. */
+.temas-view {
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
+.temas-view .view-section {
+  font-size: 0.8125rem;
+  color: var(--muted-color);
+  margin: 0 0 0.25rem;
+}
+
+.temas-view .view-title {
+  margin-bottom: 0.25rem;
+}
+
+.temas-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.temas-header__text {
+  min-width: 0;
+  flex: 1;
+}
+
+.temas-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1rem 0 1rem;
+}
+
+.temas-add-btn {
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--link-color);
+  border: 1px solid var(--link-color);
+  border-radius: 999px;
+  padding: 0.5rem 1.125rem;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.temas-add-btn:hover {
+  background: #163052;
+  border-color: #163052;
+}
+
+.level-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.level-badge {
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-main);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  padding: 0.375rem 0.875rem;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.level-badge:hover {
+  border-color: var(--link-color);
+  color: var(--link-color);
+}
+
+.level-badge.is-active {
+  background: var(--shell-bg);
+  border-color: var(--shell-bg);
+  color: #ffffff;
+}
+
+.topic-list {
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+.topic-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 14rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+@media (min-width: 640px) {
+  .topic-card {
+    width: calc(50% - 0.375rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .topic-card {
+    width: calc(33.333% - 0.5rem);
+  }
+}
+
+.topic-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.topic-bar {
+  display: block;
+  width: 100%;
+  height: 6px;
+}
+
+.topic-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem 0.5rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.topic-body {
+  padding: 0.75rem 1rem 1rem;
+  flex: 1;
+}
+
+.topic-level {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--shell-bg);
+  background: var(--bg-main);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  margin-bottom: 0;
+}
+
+.topic-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--heading-color);
+  margin: 0 0 0.25rem;
+  line-height: 1.3;
+}
+
+.topic-details {
+  font-size: 0.875rem;
+  color: var(--muted-color);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.topic-actions {
+  flex: none;
+  display: flex;
+  gap: 0.25rem;
+}
+
+.topic-icon-btn {
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--card-border);
+  border-radius: 0.5rem;
+  color: var(--muted-color);
+  cursor: pointer;
+}
+
+.topic-icon-btn .material-symbols-outlined {
+  font-size: 1.125rem !important;
+}
+
+.topic-icon-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.topic-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem 0.875rem;
+  border-top: 1px solid var(--card-border);
+  margin-top: auto;
+}
+
+.topic-link {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--muted-color);
+  text-decoration: none;
+}
+
+.topic-count {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--muted-color);
+}
+
+.topic-card--loading {
+  opacity: 0.7;
+}
+
+/* -----------------------------------------------------------
+   MODALES (Agregar/Editar tema + Confirmar eliminar)
+   ----------------------------------------------------------- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 1000;
+  animation: modalFade 0.18s ease-out;
+}
+
+.modal-backdrop[hidden] {
+  display: none;
+}
+
+@keyframes modalFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-card {
+  position: relative;
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 1.5rem 1.75rem 1.25rem;
+  width: 100%;
+  max-width: 32rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  animation: modalIn 0.22s ease-out;
+}
+
+.modal-card--confirm {
+  max-width: 24rem;
+  text-align: center;
+}
+
+.modal-card__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--heading-color);
+  margin: 0 0 1rem;
+}
+
+.modal-section {
+  font-size: 0.75rem;
+  color: var(--muted-color);
+  margin: 0 0 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.modal-close {
+  position: absolute;
+  top: 0.625rem;
+  right: 0.625rem;
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0.5rem;
+  color: var(--muted-color);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.modal-close:hover {
+  background: var(--bg-main);
+  color: var(--heading-color);
+}
+
+.modal-close .material-symbols-outlined {
+  font-size: 1.25rem !important;
+}
+
+.modal-error {
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(220, 38, 38, 0.08);
+  color: #b91c1c;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.modal-error[hidden] {
+  display: none;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.625rem;
+  margin-top: 1rem;
+}
+
+.modal-actions--center {
+  justify-content: center;
+}
+
+/* Botones del modal (renombrados desde .btn para evitar conflicto con ConfigView) */
+.modal-btn {
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.5rem 1.25rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.modal-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.modal-btn-primary {
+  background: var(--link-color);
+  color: #ffffff;
+  border-color: var(--link-color);
+}
+
+.modal-btn-primary:hover:not(:disabled) {
+  background: #163052;
+  border-color: #163052;
+}
+
+.modal-btn-secondary {
+  background: var(--card-bg);
+  color: var(--link-color);
+  border-color: var(--card-border);
+}
+
+.modal-btn-secondary:hover:not(:disabled) {
+  border-color: var(--link-color);
+}
+
+.modal-btn-danger {
+  background: #dc2626;
+  color: #ffffff;
+  border-color: #dc2626;
+}
+
+.modal-btn-danger:hover:not(:disabled) {
+  background: #b91c1c;
+  border-color: #b91c1c;
+}
+
+/* Estilos del formulario dentro del modal */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.875rem;
+}
+
+.form-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 0.375rem;
+}
+
+.form-input,
+.form-textarea {
+  font: inherit;
+  font-size: 0.9375rem;
+  color: var(--text-main);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--link-color);
+  box-shadow: 0 0 0 3px rgba(30, 56, 97, 0.15);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 4.5rem;
+}
+
+/* -----------------------------------------------------------
+   EMPTY STATE (reutilizable)
+   ----------------------------------------------------------- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: var(--card-bg);
+  border: 1px dashed var(--card-border);
+  border-radius: var(--radius);
+  gap: 0.75rem;
+}
+
+.empty-state__icon {
+  font-size: 3rem !important;
+  color: var(--muted-color);
+  opacity: 0.5;
+}
+
+.empty-state__title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--heading-color);
+  margin: 0;
+}
+
+.empty-state__description {
+  font-size: 0.9375rem;
+  color: var(--muted-color);
+  margin: 0;
+  max-width: 32rem;
+}
+
+.empty-state__cta {
+  margin-top: 0.5rem;
+}
+
+/* -----------------------------------------------------------
+   BREADCRUMB (reutilizable en Áreas, Disciplinas, Temas,
+   Subtemas, Preguntas)
+   ----------------------------------------------------------- */
+.breadcrumb {
+  font-size: 0.8125rem;
+  color: var(--muted-color);
+  margin: 0 0 0.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.breadcrumb-link {
+  color: var(--muted-color);
+  text-decoration: none;
+  border-bottom: 1px dotted transparent;
+  transition: border-color 0.15s ease;
+}
+
+.breadcrumb-link:hover {
+  border-bottom-color: var(--muted-color);
+}
+
+.breadcrumb-current {
+  color: var(--muted-color);
+}
+
+.breadcrumb-sep {
+  color: var(--muted-color);
+  margin: 0 0.125rem;
+}
