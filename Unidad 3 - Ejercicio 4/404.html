@@ -32,12 +32,13 @@
   <header class="app-header">  <!-- Solo visible en modo móvil (<640px) -->
     <div id="app-avatar-img" role="img" aria-label="Foto de perfil"></div>
     <span id="app-user-name">Invitado</span>
+    <span class="connection-status"></span>
     <button type="button" class="theme-toggle"
             aria-label="Cambiar a tema oscuro" aria-pressed="false"
             title="Cambiar a tema oscuro">
       <svg class="icon" aria-hidden="true">
-        <use class="theme-icon-moon" href="src/components/icons.svg#icon-moon"></use>
-        <use class="theme-icon-sun"  href="src/components/icons.svg#icon-sun"></use>
+        <use class="theme-icon-moon" href="src/assets/icons.svg#icon-moon"></use>
+        <use class="theme-icon-sun"  href="src/assets/icons.svg#icon-sun"></use>
       </svg>
     </button>
   </header>
@@ -68,27 +69,27 @@
 
       <nav class="app-nav">
         <a href="/PWA-2026-Meza-Lobato/Unidad%203%20-%20Ejercicio%204/" data-link>
-          <svg class="icon" aria-hidden="true"><use href="src/components/icons.svg#icon-home"></use></svg>
+          <svg class="icon" aria-hidden="true"><use href="src/assets/icons.svg#icon-home"></use></svg>
           Inicio
         </a>
 
         <div class="protected-nav" hidden>
           <a href="/PWA-2026-Meza-Lobato/Unidad%203%20-%20Ejercicio%204/editar/preguntas" data-link>
-            <svg class="icon" aria-hidden="true"><use href="src/components/icons.svg#icon-help"></use></svg>
+            <svg class="icon" aria-hidden="true"><use href="src/assets/icons.svg#icon-help"></use></svg>
             Preguntas
           </a>
           <a href="/PWA-2026-Meza-Lobato/Unidad%203%20-%20Ejercicio%204/editar/tableros" data-link>
-            <svg class="icon" aria-hidden="true"><use href="src/components/icons.svg#icon-dashboard"></use></svg>
+            <svg class="icon" aria-hidden="true"><use href="src/assets/icons.svg#icon-dashboard"></use></svg>
             Tableros
           </a>
           <a href="/PWA-2026-Meza-Lobato/Unidad%203%20-%20Ejercicio%204/editar/grupos" data-link>
-            <svg class="icon" aria-hidden="true"><use href="src/components/icons.svg#icon-groups"></use></svg>
+            <svg class="icon" aria-hidden="true"><use href="src/assets/icons.svg#icon-groups"></use></svg>
             Grupos
           </a>
         </div>
 
         <a href="/PWA-2026-Meza-Lobato/Unidad%203%20-%20Ejercicio%204/configuracion" data-link>
-          <svg class="icon" aria-hidden="true"><use href="src/components/icons.svg#icon-config"></use></svg>
+          <svg class="icon" aria-hidden="true"><use href="src/assets/icons.svg#icon-config"></use></svg>
           Configuración
         </a>
       </nav>
@@ -96,12 +97,13 @@
       <div class="sidebar-bottom">
         <div id="app-avatar-img" role="img" aria-label="Foto de perfil"></div>
         <span id="app-user-name">Invitado</span>
+        <span class="connection-status"></span>
         <button type="button" class="theme-toggle"
                 aria-label="Cambiar a tema oscuro" aria-pressed="false"
                 title="Cambiar a tema oscuro">
           <svg class="icon" aria-hidden="true">
-            <use class="theme-icon-moon" href="src/components/icons.svg#icon-moon"></use>
-            <use class="theme-icon-sun"  href="src/components/icons.svg#icon-sun"></use>
+            <use class="theme-icon-moon" href="src/assets/icons.svg#icon-moon"></use>
+            <use class="theme-icon-sun"  href="src/assets/icons.svg#icon-sun"></use>
           </svg>
         </button>
       </div>
@@ -121,13 +123,13 @@
 
   <footer class="app-footer">   <!-- Solo visible en modo móvil (<640px) -->
     <a href="/PWA-2026-Meza-Lobato/Unidad%203%20-%20Ejercicio%204/" data-link aria-label="Home" title="Home">
-      <svg class="icon" aria-hidden="true"><use href="src/components/icons.svg#icon-home"></use></svg>
+      <svg class="icon" aria-hidden="true"><use href="src/assets/icons.svg#icon-home"></use></svg>
     </a>
     <a class="protected-nav" hidden href="/PWA-2026-Meza-Lobato/Unidad%203%20-%20Ejercicio%204/editar" data-link aria-label="Editar" title="Editar">
-      <svg class="icon" aria-hidden="true"><use href="src/components/icons.svg#icon-edit"></use></svg>
+      <svg class="icon" aria-hidden="true"><use href="src/assets/icons.svg#icon-edit"></use></svg>
     </a>
     <a href="/PWA-2026-Meza-Lobato/Unidad%203%20-%20Ejercicio%204/configuracion" data-link aria-label="Configuración" title="Configuración">
-      <svg class="icon" aria-hidden="true"><use href="src/components/icons.svg#icon-config"></use></svg>
+      <svg class="icon" aria-hidden="true"><use href="src/assets/icons.svg#icon-config"></use></svg>
     </a>
   </footer>
 

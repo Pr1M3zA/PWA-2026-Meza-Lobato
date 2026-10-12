@@ -39,7 +39,7 @@
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: var(--radius);
-  padding: 0.875rem 1.125rem;
+  padding: 1.125rem 1.25rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   color: var(--text-main);
@@ -78,7 +78,7 @@
   font-size: 1rem;
   font-weight: 700;
   color: var(--heading-color);
-  margin: 0 0 0.125rem;
+  margin: 0 0 0.375rem;
   line-height: 1.25;
 }
 
@@ -179,7 +179,7 @@
   display: flex;
   align-items: center;
   gap: 0.875rem;
-  padding: 0;
+  padding: 1rem 0 0.75rem;
 }
 
 .discipline-text {
@@ -191,7 +191,7 @@
   font-size: 1rem;
   font-weight: 700;
   color: var(--heading-color);
-  margin: 0 0 0.125rem;
+  margin: 0 0 0.375rem;
   line-height: 1.25;
 }
 
@@ -214,6 +214,8 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
+  align-items: start;
+  align-content: start;
 }
 
 .question-card {
@@ -460,11 +462,15 @@
   list-style: none;
   margin: 0 0 1.5rem;
   padding: 0;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 0.75rem;
-  align-items: flex-start;
-  align-content: flex-start;
+  align-items: start;
+  align-content: start;
+}
+
+.topic-item {
+  display: flex;
 }
 
 .topic-card {
@@ -483,14 +489,14 @@
 }
 
 @media (min-width: 640px) {
-  .topic-card {
-    width: calc(50% - 0.375rem);
+  .topic-list {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (min-width: 1024px) {
-  .topic-card {
-    width: calc(33.333% - 0.5rem);
+  .topic-list {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 

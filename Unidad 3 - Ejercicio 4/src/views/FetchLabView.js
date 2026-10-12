@@ -1,8 +1,3 @@
-import { BASE_URL } from "../config.js";
-
-const DATA_URL = `/${BASE_URL}/src/data/education.json`;
-const API_GET_URL = "https://jsonplaceholder.typicode.com/posts/1";
-const API_POST_URL = "https://jsonplaceholder.typicode.com/posts";
 const MAX_LOG = 25;
 
 const SOURCE_LABELS = {
@@ -11,7 +6,17 @@ const SOURCE_LABELS = {
   ignored: `<small class="meta-muted">Ignorada (el SW no responde)</small>`,
 };
 
-const fetchLog = [];
+const STRATEGY_LABELS = {
+  "cache-first": `<span class="badge badge--ok">Cache First</span>`,
+  "network-first": `<span class="badge badge--no">Network First</span>`,
+  "stale-while-revalidate": `<span class="badge badge--neutral">SWR</span>`,
+};
+
+let fetchLog = [];
+try {
+  const stored = sessionStorage.getItem("fetchLog");
+  if (stored) fetchLog = JSON.parse(stored);
+} catch (e) {}
 
 function buildLogHTML() {
   if (fetchLog.length === 0) {
@@ -20,11 +25,12 @@ function buildLogHTML() {
 
   const rows = fetchLog
     .map(
-      ({ time, method, path, source }) => `
+      ({ time, method, path, source, strategy }) => `
         <tr>
           <td>${time}</td>
           <td>${method}</td>
           <td><small><code>${path}</code></small></td>
+          <td>${STRATEGY_LABELS[strategy] ?? `<small class="meta-muted">—</small>`}</td>
           <td>${SOURCE_LABELS[source] ?? source}</td>
         </tr>
       `
@@ -34,7 +40,7 @@ function buildLogHTML() {
   return `
     <table class="lab-table lab-log-table">
       <thead>
-        <tr><th>Hora</th><th>Método</th><th>Recurso</th><th>Resultado</th></tr>
+        <tr><th>Hora</th><th>Método</th><th>Recurso</th><th>Estrategia</th><th>Resultado</th></tr>
       </thead>
       <tbody>${rows}</tbody>
     </table>
@@ -55,6 +61,11 @@ navigator.serviceWorker?.addEventListener("message", (event) => {
     time: new Date().toLocaleTimeString("es-MX"),
   });
   fetchLog.splice(MAX_LOG);
+  
+  try {
+    sessionStorage.setItem("fetchLog", JSON.stringify(fetchLog));
+  } catch (e) {}
+  
   renderLog();
 });
 
@@ -114,21 +125,6 @@ function showResult(message) {
   if (output) output.textContent = message;
 }
 
-async function timedFetch(label, url, options) {
-  showResult(`${label}: pidiendo...`);
-  const start = performance.now();
-
-  try {
-    const response = await fetch(url, options);
-    const text = await response.text();
-    const ms = Math.round(performance.now() - start);
-    showResult(`${label} → ${response.status} en ${ms} ms\n${text}`);
-  } catch (error) {
-    showResult(`${label} → ${error.name}: ${error.message}`);
-  }
-  await renderCacheContent();
-}
-
 async function deleteFromCache(cacheName, url) {
   const cache = await caches.open(cacheName);
   const deleted = await cache.delete(url);
@@ -147,22 +143,15 @@ document.addEventListener("click", async (event) => {
 
   const action = button.dataset.labAction;
 
-  if (action === "get-local") {
-    await timedFetch("GET archivo propio", DATA_URL);
-  } else if (action === "get-api") {
-    await timedFetch("GET API externa", API_GET_URL);
-  } else if (action === "post-api") {
-    await timedFetch("POST API externa", API_POST_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: "demo", body: "hola", userId: 1 }),
-    });
-  } else if (action === "refresh-cache") {
+  if (action === "refresh-cache") {
     await renderCacheContent();
   } else if (action === "delete-entry") {
     await deleteFromCache(button.dataset.cache, button.dataset.url);
   } else if (action === "clear-log") {
     fetchLog.length = 0;
+    try {
+      sessionStorage.removeItem("fetchLog");
+    } catch (e) {}
     renderLog();
   }
 });
@@ -177,16 +166,6 @@ export default async function FetchLabView() {
       </div>
 
       <div class="view-content view-content--padded">
-        <div class="card">
-          <h2>Laboratorio de fetch</h2>
-          <div class="lab-actions">
-            <button type="button" class="btn" data-lab-action="get-local">GET archivo propio</button>
-            <button type="button" class="btn" data-lab-action="get-api">GET API externa</button>
-            <button type="button" class="btn" data-lab-action="post-api">POST API externa</button>
-          </div>
-          <pre id="lab-result" class="lab-result"></pre>
-        </div>
-
         <div class="card">
           <h3>Registro de peticiones vistas por el SW</h3>
           <div id="lab-log">${buildLogHTML()}</div>

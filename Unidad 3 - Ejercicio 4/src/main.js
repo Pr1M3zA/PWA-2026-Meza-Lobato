@@ -3,6 +3,7 @@ import { getApiBaseUrl } from "./config.js";
 import { initTheme } from "./services/themeService.js";
 import { initAuth } from "./services/authService.js";
 import { initActivityLogger } from "./services/activityLogger.js";
+import { initConnectionStatus } from "./utils/cnnStatus.js";
 import mountUserShell from "./components/UserShell.js";
 import HomeView from "./views/HomeView.js";
 import EditView from "./views/EditView.js";
@@ -21,6 +22,7 @@ import ContactView from "./views/ContactView.js";
 import { registerServiceWorker } from "./utils/registerSW.js";
 import ServiceWorkerView from "./views/ServiceWorkerView.js";
 import FetchLabView from "./views/FetchLabView.js";
+
 
 const routes = [
   { path: "/", view: HomeView },
@@ -51,6 +53,7 @@ mountUserShell();
 initTheme();
 
 router.init();
+initConnectionStatus();
 
 if (document.readyState === "complete") {
   registerServiceWorker();

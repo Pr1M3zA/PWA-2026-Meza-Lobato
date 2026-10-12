@@ -1,4 +1,3 @@
-
 /* ----------------------------------------------------------- */
 /* APP SHELL - estructura fija del SPA.                          */
 /* Header (móvil), sidebar (desktop), footer (móvil).            */
@@ -24,15 +23,23 @@
   --card-border: #e5e7eb;
   --error-icon: #9ca3af;
 
-  --answer-blue-color:  #4A90B8; --answer-blue-bg:  #f0f7fc; --answer-blue-text:  #1e3861;
-  --answer-red-color:   #C26A6A; --answer-red-bg:   #fcf3f3; --answer-red-text:   #7a2929;
-  --answer-green-color: #5FA15F; --answer-green-bg: #f3faf3; --answer-green-text: #2c5a2c;
-  --answer-yellow-color:#D4B254; --answer-yellow-bg:#fcf9ef; --answer-yellow-text:#6b5318;
+  --answer-blue-color: #4A90B8;
+  --answer-blue-bg: #f0f7fc;
+  --answer-blue-text: #1e3861;
+  --answer-red-color: #C26A6A;
+  --answer-red-bg: #fcf3f3;
+  --answer-red-text: #7a2929;
+  --answer-green-color: #5FA15F;
+  --answer-green-bg: #f3faf3;
+  --answer-green-text: #2c5a2c;
+  --answer-yellow-color: #D4B254;
+  --answer-yellow-bg: #fcf9ef;
+  --answer-yellow-text: #6b5318;
 
   --btn-bg-hover: #4f7ba0;
 
   --skeleton-from: #e2e8f0;
-  --skeleton-to:   #f1f5f9;
+  --skeleton-to: #f1f5f9;
 }
 
 /* Tema oscuro */
@@ -45,24 +52,32 @@
   --card-bg: #16294a;
 
   --heading-color: #e8f1fb;
-  --link-color:    #7eb8f5;
-  --muted-color:   #8fa6c4;
-  --tag-color:     #7eb8f5;
-  --tag-bg:        #334155;
-  --input-bg:      #0a1a30;
-  --input-border:  #2a3f60;
-  --card-border:   #2a3f60;
-  --error-icon:    #d6e5f5;
+  --link-color: #7eb8f5;
+  --muted-color: #8fa6c4;
+  --tag-color: #7eb8f5;
+  --tag-bg: #334155;
+  --input-bg: #0a1a30;
+  --input-border: #2a3f60;
+  --card-border: #2a3f60;
+  --error-icon: #d6e5f5;
 
-  --answer-blue-color:  #60a5fa; --answer-blue-bg:  #1e3a5f; --answer-blue-text:  #bfdbfe;
-  --answer-red-color:   #f87171; --answer-red-bg:   #5f1f1f; --answer-red-text:   #fecaca;
-  --answer-green-color: #4ade80; --answer-green-bg: #1f3f2c; --answer-green-text: #bbf7d0;
-  --answer-yellow-color:#facc15; --answer-yellow-bg:#3f3318; --answer-yellow-text:#fde68a;
+  --answer-blue-color: #60a5fa;
+  --answer-blue-bg: #1e3a5f;
+  --answer-blue-text: #bfdbfe;
+  --answer-red-color: #f87171;
+  --answer-red-bg: #5f1f1f;
+  --answer-red-text: #fecaca;
+  --answer-green-color: #4ade80;
+  --answer-green-bg: #1f3f2c;
+  --answer-green-text: #bbf7d0;
+  --answer-yellow-color: #facc15;
+  --answer-yellow-bg: #3f3318;
+  --answer-yellow-text: #fde68a;
 
   --btn-bg-hover: #3b82f6;
 
   --skeleton-from: #16294a;
-  --skeleton-to:   #2a3f60;
+  --skeleton-to: #2a3f60;
 }
 
 *,
@@ -157,8 +172,15 @@ body {
   margin-left: auto;
   transition: background 0.2s ease, transform 0.15s ease;
 }
-.theme-toggle:hover  { background: rgba(255, 255, 255, 0.22); }
-.theme-toggle:active { transform: scale(0.94); }
+
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.theme-toggle:active {
+  transform: scale(0.94);
+}
+
 .theme-toggle:focus-visible {
   outline: 2px solid var(--shell-text);
   outline-offset: 2px;
@@ -166,26 +188,68 @@ body {
 
 /* Swap de íconos del toggle vía CSS: ambos <use> existen siempre,
    solo cambia la visibilidad según el tema. */
-.theme-icon-sun  { display: none; }
-.theme-icon-moon { display: inline; }
-[data-theme="dark"] .theme-icon-sun  { display: inline; }
-[data-theme="dark"] .theme-icon-moon { display: none; }
+.theme-icon-sun {
+  display: none;
+}
+
+.theme-icon-moon {
+  display: inline;
+}
+
+[data-theme="dark"] .theme-icon-sun {
+  display: inline;
+}
+
+[data-theme="dark"] .theme-icon-moon {
+  display: none;
+}
+
+/* Indicador de estado de conexión (Punto circular con luz) */
+.connection-status {
+  display: inline-block;
+  flex: none;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  margin-left: auto;
+  background-color: #22c55e;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.75);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  cursor: help;
+}
+
+.connection-status.is-offline {
+  background-color: #ef4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.75);
+}
+
+.connection-status:hover {
+  transform: scale(1.25);
+}
+
+.connection-status + .theme-toggle {
+  margin-left: 0;
+}
 
 /* ---------- Formulario de login (dentro de /configuracion) ----------*/
 .login-card {
   max-width: 28rem;
   margin: 1rem auto;
 }
+
 .login-title {
   color: var(--heading-color);
   margin-bottom: 0.5rem;
 }
+
 .login-form {
   margin-top: 1rem;
 }
+
 .btn-login {
   width: 100%;
 }
+
 .login-error {
   margin-top: 0.75rem;
   padding: 0.625rem 0.875rem;
@@ -202,10 +266,12 @@ body {
   color: var(--link-color);
   border: 1px solid var(--card-border);
 }
+
 .btn-logout:hover {
   background: rgba(0, 0, 0, 0.05);
   color: var(--link-color);
 }
+
 [data-theme="dark"] .btn-logout:hover {
   background: rgba(255, 255, 255, 0.06);
 }
@@ -349,7 +415,7 @@ main#app {
     padding: 0.75rem 0.625rem 1.5rem;
   }
 
-  .app-nav > .protected-nav {
+  .app-nav>.protected-nav {
     display: flex;
     flex-direction: column;
     gap: 0.125rem;
@@ -384,6 +450,7 @@ main#app {
     font-size: 2rem;
     letter-spacing: 0.025em;
   }
+
   .brand-tagline {
     font-size: 0.75rem;
   }
@@ -401,12 +468,10 @@ main#app {
 }
 
 .skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--skeleton-from) 25%,
-    var(--skeleton-to)   50%,
-    var(--skeleton-from) 75%
-  );
+  background: linear-gradient(90deg,
+      var(--skeleton-from) 25%,
+      var(--skeleton-to) 50%,
+      var(--skeleton-from) 75%);
   background-size: 200% 100%;
   animation: skeleton-loading 1.5s infinite;
   border-radius: 4px;
@@ -432,6 +497,7 @@ main#app {
   0% {
     background-position: 200% 0;
   }
+
   100% {
     background-position: -200% 0;
   }
@@ -445,15 +511,15 @@ main#app {
 
 /* Track + thumb base (light) */
 :root {
-  --sb-thumb:  #b8cce4;
-  --sb-track:  #e8edf5;
+  --sb-thumb: #b8cce4;
+  --sb-track: #e8edf5;
   --sb-thumb-hover: #7eb3d8;
 }
 
 /* Dark mode overrides */
 [data-theme="dark"] {
-  --sb-thumb:  #2a4a6e;
-  --sb-track:  #0d1f38;
+  --sb-thumb: #2a4a6e;
+  --sb-track: #0d1f38;
   --sb-thumb-hover: #3d6491;
 }
 
@@ -486,4 +552,4 @@ main#app {
 
 ::-webkit-scrollbar-corner {
   background: var(--sb-track);
-}
+}
