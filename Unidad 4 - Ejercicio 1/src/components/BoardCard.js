@@ -2,14 +2,14 @@
 
 // Conteos de casillas por tipo de efecto: { key, label, color, text }.
 // `color` es el fondo de la pill y `text` el color de texto legible sobre él.
-// Orden de render: positivas, negativas, especiales, informativas, preguntas, sin_efecto.
+// Orden de render: positivas, negativas, informativas, preguntas, especiales, sin_efecto.
 const TILE_TYPE_BADGES = [
   { key: "positivas", label: "Positivas", color: "#6CB46B", text: "#ffffff" },
   { key: "negativas", label: "Negativas", color: "#B46B6B", text: "#ffffff" },
-  { key: "especiales", label: "Especiales", color: "#946BB4", text: "#ffffff" },
-  { key: "informativas", label: "Informativas", color: "#6B93B4", text: "#ffffff" },
-  { key: "preguntas", label: "Preguntas", color: "#B3B46B", text: "#1f2326" },
-  { key: "sin_efecto", label: "Sin efecto", color: "#A8A8A8", text: "#1f2326" },
+  { key: "especiales", label: "Informativas", color: "#946BB4", text: "#ffffff" },
+  { key: "informativas", label: "Preguntas", color: "#6B93B4", text: "#ffffff" },
+  { key: "preguntas", label: "Especiales", color: "#B3B46B", text: "#ffffff" },
+  { key: "sin_efecto", label: "Sin efecto", color: "#A8A8A8", text: "#ffffff" },
 ];
 
 export default function BoardCard(board) {

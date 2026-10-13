@@ -213,14 +213,14 @@ body {
   border-radius: 50%;
   margin-left: auto;
   background-color: #22c55e;
-  box-shadow: 0 0 8px rgba(34, 197, 94, 0.75);
+  box-shadow: 0 0 0 2px #fff, 0 0 8px rgba(34, 197, 94, 0.75);
   transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
   cursor: help;
 }
 
 .connection-status.is-offline {
   background-color: #ef4444;
-  box-shadow: 0 0 8px rgba(239, 68, 68, 0.75);
+  box-shadow: 0 0 0 2px #fff, 0 0 8px rgba(239, 68, 68, 0.75);
 }
 
 .connection-status:hover {

@@ -9,7 +9,7 @@ console.log("[SW] typeof caches => ", typeof caches);
 
 console.log("[SW] Scope => ", self.registration.scope);
 
-const CACHE_VERSION = "wl-shell-v5";
+const CACHE_VERSION = "wl-shell-v10";
 
 const API_ORIGIN = "https://wires-and-ladders-api.vercel.app";
 const ALLOWED_HOSTS = [self.location.origin, new URL(API_ORIGIN).hostname, "fonts.googleapis.com", "fonts.gstatic.com"];
@@ -22,7 +22,14 @@ const APP_SHELL = [
   "./src/assets/bg-pattern.svg",
   "./src/assets/bottom-design.svg",
   "./src/assets/wireladders-logo.svg",
-  "./src/assets/wl-icon.png",
+  "./manifest.json",
+  "./icons/icon-1024.png",
+  "./icons/icon-192.png",
+  "./icons/icon-512.png",
+  "./icons/apple-touch-icon-167.png",
+  "./icons/apple-touch-icon-180.png",
+  "./icons/apple-touch-startup-1242x2688.png",
+  "./icons/favicon-32.png",
   "./src/components/AreaCard.js",
   "./src/components/BoardCard.js",
   "./src/components/Breadcrumb.js",
