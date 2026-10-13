@@ -1,0 +1,18 @@
+<div class="temas-view view-root">
+  <header class="temas-header view-header">
+    <div class="temas-header__text">
+      <nav class="breadcrumb" aria-label="Navegación">{{breadcrumb}}</nav>
+      <h1 class="view-title">Temas</h1>
+    </div>
+    <button type="button" class="temas-add-btn" id="temas-add-btn">Agregar +</button>
+  </header>
+  <p class="view-lead view-toolbar">Agrega y edita temas</p>
+  <div class="temas-toolbar view-toolbar">
+    <div id="level-filter-container">{{levelChips}}</div>
+  </div>
+  <div id="topic-container" class="view-content">
+    {{content}}
+  </div>
+  {{formModal}}
+  {{confirmModal}}
+</div>
