@@ -283,7 +283,7 @@ main#app {
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: hidden;
+  overflow-y: auto;
   padding: 1.25rem 1rem;
 }
 
@@ -344,6 +344,7 @@ main#app {
   main#app {
     padding: 2rem;
     height: 100%;
+    overflow-y: auto;
   }
 
   /* ---------- Sidebar ---------- */
