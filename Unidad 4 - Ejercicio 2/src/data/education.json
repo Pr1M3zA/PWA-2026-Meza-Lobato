@@ -1,0 +1,47 @@
+{
+	"actualizado": "v2",
+	"knowledgeAreas": [
+		{
+			"id": 1,
+			"description": "Ciencias Formales",
+			"details": "Áreas que estudian sistemas abstractos y modelos lógicos como matemáticas, estadística y computación.",
+			"color": "#84BBE9"
+		},
+		{
+			"id": 2,
+			"description": "Ciencias Naturales",
+			"details": "Disciplinas que investigan los fenómenos físicos, químicos y biológicos del universo.",
+			"color": "#A9E984"
+		},
+		{
+			"id": 3,
+			"description": "Ciencias Sociales",
+			"details": "Estudio de la sociedad, cultura, comportamiento humano y estructuras políticas y económicas.",
+			"color": "#E984C2"
+		},
+		{
+			"id": 4,
+			"description": "Ciencias Aplicadas e Ingeniería",
+			"details": "Aplicación del conocimiento científico para diseñar, construir y optimizar sistemas y tecnologías.",
+			"color": "#A584E9"
+		},
+		{
+			"id": 5,
+			"description": "Ciencias de la Salud",
+			"details": "Campos dedicados al cuidado, prevención y tratamiento de la salud humana.",
+			"color": "#E98484"
+		},
+		{
+			"id": 6,
+			"description": "Artes y Humanidades",
+			"details": "Expresión cultural, artística y filosófica que interpreta la experiencia humana.",
+			"color": "#E9D184"
+		},
+		{
+			"id": 7,
+			"description": "Áreas Interdisciplinarias y Emergentes",
+			"details": "Nuevos campos que integran varias disciplinas para abordar problemas complejos y actuales.",
+			"color": "#C8C8C8"
+		}
+	]
+}

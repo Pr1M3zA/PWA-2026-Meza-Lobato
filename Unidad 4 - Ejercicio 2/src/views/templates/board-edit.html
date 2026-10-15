@@ -1,0 +1,39 @@
+<div class="tableros-view board-edit-view view-root">
+  <div class="view-header">{{breadcrumb}}</div>
+  <div class="board-edit-grid view-content">
+    <section class="card board-edit-form-card card--scrollable">
+      <div class="board-edit-card-header">
+        <h2 class="board-edit-card-title">Datos del tablero</h2>
+        <button type="submit" form="board-edit-form" class="board-icon-btn" title="Guardar cambios" aria-label="Guardar cambios">
+          <span class="material-symbols-outlined">save</span>
+        </button>
+      </div>
+      <div class="card__body">
+        <form id="board-edit-form" novalidate>
+          <div class="board-edit-name-bg-row">
+            <div class="form-field">
+              <label class="form-label" for="be-name">Nombre del tablero</label>
+              <input id="be-name" class="form-input" type="text" maxlength="60" value="{{boardNameEscaped}}" />
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="bf-bg-select">Background</label>
+              <select id="bf-bg-select" class="form-input">{{bgOptions}}</select>
+            </div>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="be-description">Descripción</label>
+            <textarea id="be-description" class="form-textarea" rows="3">{{boardDescription}}</textarea>
+          </div>
+        </form>
+        <div class="board-edit-tile-info">
+          {{tileInfoCard}}
+        </div>
+      </div>
+    </section>
+
+    <section class="card board-edit-preview-card card--scrollable">
+      <h2 class="board-edit-card-title">Vista previa</h2>
+      <div class="card__body board-edit-preview" id="board-edit-preview">{{boardSvg}}</div>
+    </section>
+  </div>
+</div>
