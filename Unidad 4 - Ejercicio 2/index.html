@@ -50,15 +50,21 @@
   <header class="app-header">  <!-- Solo visible en modo móvil (<640px) -->
     <div id="app-avatar-img" role="img" aria-label="Foto de perfil"></div>
     <span id="app-user-name">Invitado</span>
-    <span class="connection-status"></span>
-    <button type="button" class="theme-toggle"
-            aria-label="Cambiar a tema oscuro" aria-pressed="false"
-            title="Cambiar a tema oscuro">
-      <svg class="icon" aria-hidden="true">
-        <use class="theme-icon-moon" href="src/assets/icons.svg#icon-moon"></use>
-        <use class="theme-icon-sun"  href="src/assets/icons.svg#icon-sun"></use>
-      </svg>
-    </button>
+    <div class="shell-actions">
+      <span class="connection-status"></span>
+      <button type="button" class="install-btn" aria-label="Instalar aplicación"
+              title="Instalar aplicación" hidden>
+        <svg class="icon" aria-hidden="true"><use href="src/assets/icons.svg#icon-download"></use></svg>
+      </button>
+      <button type="button" class="theme-toggle"
+              aria-label="Cambiar a tema oscuro" aria-pressed="false"
+              title="Cambiar a tema oscuro">
+        <svg class="icon" aria-hidden="true">
+          <use class="theme-icon-moon" href="src/assets/icons.svg#icon-moon"></use>
+          <use class="theme-icon-sun"  href="src/assets/icons.svg#icon-sun"></use>
+        </svg>
+      </button>
+    </div>
   </header>
 
   <div class="app">
@@ -101,15 +107,21 @@
       <div class="sidebar-bottom">
         <div id="app-avatar-img" role="img" aria-label="Foto de perfil"></div>
         <span id="app-user-name">Invitado</span>
-        <span class="connection-status"></span>
-        <button type="button" class="theme-toggle"
-                aria-label="Cambiar a tema oscuro" aria-pressed="false"
-                title="Cambiar a tema oscuro">
-          <svg class="icon" aria-hidden="true">
-            <use class="theme-icon-moon" href="src/assets/icons.svg#icon-moon"></use>
-            <use class="theme-icon-sun"  href="src/assets/icons.svg#icon-sun"></use>
-          </svg>
-        </button>
+        <div class="shell-actions">
+          <span class="connection-status"></span>
+          <button type="button" class="install-btn" aria-label="Instalar aplicación"
+                  title="Instalar aplicación" hidden>
+            <svg class="icon" aria-hidden="true"><use href="src/assets/icons.svg#icon-download"></use></svg>
+          </button>
+          <button type="button" class="theme-toggle"
+                  aria-label="Cambiar a tema oscuro" aria-pressed="false"
+                  title="Cambiar a tema oscuro">
+            <svg class="icon" aria-hidden="true">
+              <use class="theme-icon-moon" href="src/assets/icons.svg#icon-moon"></use>
+              <use class="theme-icon-sun"  href="src/assets/icons.svg#icon-sun"></use>
+            </svg>
+          </button>
+        </div>
       </div>
     </aside>
 

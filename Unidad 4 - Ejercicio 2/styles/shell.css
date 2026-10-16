@@ -211,7 +211,6 @@ body {
   width: 0.625rem;
   height: 0.625rem;
   border-radius: 50%;
-  margin-left: auto;
   background-color: #22c55e;
   box-shadow: 0 0 0 2px #fff, 0 0 8px rgba(34, 197, 94, 0.75);
   transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
@@ -227,8 +226,59 @@ body {
   transform: scale(1.25);
 }
 
-.connection-status + .theme-toggle {
+/* Agrupa los tres controles de la derecha (conexión, instalar, tema)
+   para que se mantengan visualmente juntos. */
+.shell-actions {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+/* Solo aplica el gap entre los 3 controles cuando el botón de
+   instalar está visible. Si se oculta (app instalada o evento
+   suprimido), connection-status y theme-toggle quedan con un
+   gap pequeño para que no se vean pegados. */
+.shell-actions:has(.install-btn:not([hidden])) {
+  gap: 0.5rem;
+}
+
+.shell-actions:not(:has(.install-btn:not([hidden]))) {
+  gap: 0.75rem;
+}
+
+/* Botón circular de instalación */
+.install-btn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--shell-text);
+  cursor: pointer;
+  padding: 0;
   margin-left: 0;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.install-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.install-btn:active {
+  transform: scale(0.94);
+}
+
+.install-btn:focus-visible {
+  outline: 2px solid var(--shell-text);
+  outline-offset: 2px;
+}
+
+.install-btn[hidden] {
+  display: none;
 }
 
 /* ---------- Formulario de login (dentro de /configuracion) ----------*/

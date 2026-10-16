@@ -1,7 +1,16 @@
 ﻿import loadTemplate from "../utils/templateLoader.js";
 import { isAuthenticated, login, logout, getCurrentUser } from "../services/authService.js";
 import { getErrorMessage } from "../utils/errorMessage.js";
+import { getInstallHelp, isStandalone } from "../utils/installPrompt.js";
 import { REFRESH_VIEW_EVENT } from "../router/router.js";
+
+function paintInstallHelp() {
+  const card = document.getElementById("install-help-card");
+  const summary = document.getElementById("install-help-summary");
+  if (!card || !summary) return;
+  card.hidden = isStandalone();
+  summary.textContent = getInstallHelp();
+}
 
 export default async function ConfigView() {
   const html = await loadTemplate("config.html", import.meta.url);
@@ -14,6 +23,9 @@ export default async function ConfigView() {
       loginSection.hidden = authed;
       configSection.hidden = !authed;
     }
+    
+    paintInstallHelp();
+    window.addEventListener("install-state-changed", paintInstallHelp);
 
     // Llenar los campos de perfil con los datos del usuario autenticado.
     const user = getCurrentUser();

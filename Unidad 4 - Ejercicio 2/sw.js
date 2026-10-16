@@ -9,7 +9,7 @@ console.log("[SW] typeof caches => ", typeof caches);
 
 console.log("[SW] Scope => ", self.registration.scope);
 
-const CACHE_VERSION = "wl-shell-v6";
+const CACHE_VERSION = "wl-shell-v7";
 
 const API_ORIGIN = "https://wires-and-ladders-api.vercel.app";
 const ALLOWED_HOSTS = [self.location.origin, new URL(API_ORIGIN).hostname, "fonts.googleapis.com", "fonts.gstatic.com"];
@@ -78,6 +78,8 @@ const APP_SHELL = [
   "./src/services/topicsService.js",
   "./src/utils/cnnStatus.js",
   "./src/utils/errorMessage.js",
+  "./src/utils/installButton.js",
+  "./src/utils/installPrompt.js",
   "./src/utils/moduleLoader.js",
   "./src/utils/registerSW.js",
   "./src/utils/slugify.js",

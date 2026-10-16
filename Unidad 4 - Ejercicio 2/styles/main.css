@@ -364,6 +364,10 @@ body {
   .settings-list {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  #install-help-card {
+    grid-column: 1 / -1;
+  }
 }
 
 /* Service Worker card: ancho completo + botón a la derecha */

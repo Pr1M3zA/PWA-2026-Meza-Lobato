@@ -4,6 +4,8 @@ import { initTheme } from "./services/themeService.js";
 import { initAuth } from "./services/authService.js";
 import { initActivityLogger } from "./services/activityLogger.js";
 import { initConnectionStatus } from "./utils/cnnStatus.js";
+import { initInstallPrompt } from "./utils/installPrompt.js";
+import { initInstallButton } from "./utils/installButton.js";
 import mountUserShell from "./components/UserShell.js";
 import HomeView from "./views/HomeView.js";
 import EditView from "./views/EditView.js";
@@ -45,6 +47,9 @@ const routes = [
 
 const app = document.getElementById("app");
 const router = new Router(routes, app);
+
+initInstallPrompt();
+initInstallButton();
 
 getApiBaseUrl();
 await initAuth();
