@@ -1,0 +1,20 @@
+{
+  "name": "Wires&Ladders - Panel Educativo",
+  "short_name": "W&L Web",
+  "description": "Panel educativo de Wires&Ladders dirigido a docentes, conectado con la aplicación móvil para gestionar preguntas, tableros, grupos y resultados de aprendizaje.",
+  "lang": "es-MX",
+  "id": "/PWA-2026-Meza-Lobato/Unidad%204%20-%20Ejercicio%203/",
+  "start_url": "./",
+  "scope": "/PWA-2026-Meza-Lobato/Unidad%204%20-%20Ejercicio%203/",
+  "display": "standalone",
+  "theme_color": "#4A6E8E",
+  "background_color": "#f7f8fb",
+  "orientation": "any",
+  "icons": [
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "categories": ["education"]
+}
