@@ -604,6 +604,46 @@
   color: var(--muted-color);
 }
 
+/* Tema que vive sólo en el dispositivo (cola de salida) */
+.topic-item--pending .topic-card {
+  border-style: dashed;
+  box-shadow: none;
+  opacity: 0.92;
+}
+
+.topic-pending-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(234, 179, 8, 0.16);
+  color: #a16207;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.topic-pending-badge .material-symbols-outlined {
+  font-size: 0.9rem;
+}
+
+.topic-link--disabled {
+  color: var(--muted-color);
+  opacity: 0.75;
+  cursor: default;
+}
+
+/* Aviso de que la lista no viene del servidor */
+.topic-stale-banner {
+  margin: 0 0 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  background: rgba(234, 179, 8, 0.12);
+  color: #a16207;
+  font-size: 0.8rem;
+}
+
 .topic-card--loading {
   opacity: 0.7;
 }
@@ -707,6 +747,20 @@
 }
 
 .modal-error[hidden] {
+  display: none;
+}
+
+/* Confirmación de que el cambio quedó en la cola (no es un error). */
+.modal-notice {
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(22, 163, 74, 0.1);
+  color: #15803d;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.modal-notice[hidden] {
   display: none;
 }
 

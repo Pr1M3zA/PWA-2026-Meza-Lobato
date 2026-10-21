@@ -1,5 +1,5 @@
-import { importWithRetry } from "../utils/moduleLoader.js";
 import { getErrorMessage } from "../utils/errorMessage.js";
+import { queueTopic } from "../utils/backgroundSync.js";
 
 const MODAL_ID = "topic-form-modal";
 
@@ -45,6 +45,7 @@ export function topicFormModalHTML(levels, selectedLevelId, areaDescription, dis
           <textarea id="modal-topic-details" class="form-textarea" rows="3"></textarea>
         </div>
 
+        <p id="modal-form-notice" class="modal-notice" hidden></p>
         <p id="modal-form-error" class="modal-error" hidden></p>
 
         <div class="modal-actions">
@@ -64,6 +65,7 @@ export async function setupTopicModal({ levels, currentLevelId, iddisc, onAfterS
   const filterEl = modalEl.querySelector("#modal-level-filter");
   const nameInput = modalEl.querySelector("#modal-topic-name");
   const detailsInput = modalEl.querySelector("#modal-topic-details");
+  const noticeEl = modalEl.querySelector("#modal-form-notice");
   const errorEl = modalEl.querySelector("#modal-form-error");
   const closeBtn = modalEl.querySelector('[data-modal-action="close"]');
   const cancelBtn = modalEl.querySelector('[data-modal-action="cancel"]');
@@ -90,13 +92,35 @@ export async function setupTopicModal({ levels, currentLevelId, iddisc, onAfterS
     errorEl.textContent = "";
   }
 
+  function clearNotice() {
+    noticeEl.hidden = true;
+    noticeEl.textContent = "";
+  }
+
   function showError(msg) {
+    clearNotice();
     errorEl.textContent = msg;
     errorEl.hidden = false;
   }
 
+  function showNotice(msg) {
+    clearError();
+    noticeEl.textContent = msg;
+    noticeEl.hidden = false;
+  }
+
+  function queuedNotice(syncMode) {
+    if (!navigator.onLine) {
+      return "Guardado sin conexión. Se enviará al recuperar la señal.";
+    }
+    return syncMode === "background-sync"
+      ? "Guardado. Se enviará en segundo plano."
+      : "Guardado. Enviando al servidor…";
+  }
+
   function openModal() {
     clearError();
+    clearNotice();
     modalEl.hidden = false;
     nameInput.focus();
   }
@@ -104,6 +128,7 @@ export async function setupTopicModal({ levels, currentLevelId, iddisc, onAfterS
   function closeModal() {
     modalEl.hidden = true;
     clearError();
+    clearNotice();
   }
 
   function openAdd(opts = {}) {
@@ -151,17 +176,27 @@ export async function setupTopicModal({ levels, currentLevelId, iddisc, onAfterS
 
     saveBtn.disabled = true;
     try {
-      const { default: TopicsService } = await importWithRetry(
-        new URL("../services/topicsService.js", import.meta.url).href
-      );
-      const service = new TopicsService();
-      if (mode === "edit") {
-        await service.update({ id: currentTopicId, id_level, description, details });
-      } else {
-        await service.create({ id_discipline: iddisc, id_level, description, details });
-      }
+      // Guardar primero: el item entra a la cola ANTES de cualquier intento de
+      // red. Con internet el Service Worker lo vacía en segundos. Sin internet
+      // se queda en el dispositivo y se envía al recuperar la señal.
+      const isEdit = mode === "edit";
+      const syncMode = await queueTopic({
+        method: isEdit ? "PUT" : "POST",
+        payload: isEdit
+          ? { id: currentTopicId, id_level, description, details }
+          : { id_discipline: iddisc, id_level, description, details },
+        disciplineId: iddisc,
+        levelId: id_level,
+      });
+
+      showNotice(queuedNotice(syncMode));
+      // Breve pausa para que el usuario vea la confirmación y luego se cierra.
+      await new Promise((resolve) => setTimeout(resolve, 1100));
+
       closeModal();
-      if (typeof onAfterSave === "function") onAfterSave();
+      if (typeof onAfterSave === "function") {
+        onAfterSave({ pending: true, levelId: id_level, mode: syncMode, isEdit });
+      }
     } catch (e) {
       showError(getErrorMessage(e));
     } finally {

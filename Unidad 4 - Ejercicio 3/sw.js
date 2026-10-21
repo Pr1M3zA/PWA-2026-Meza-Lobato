@@ -9,10 +9,45 @@ console.log("[SW] typeof caches => ", typeof caches);
 
 console.log("[SW] Scope => ", self.registration.scope);
 
-const CACHE_VERSION = "wl-shell-v7";
+const CACHE_VERSION = "wl-shell-v8";
 
 const API_ORIGIN = "https://wires-and-ladders-api.vercel.app";
-const ALLOWED_HOSTS = [self.location.origin, new URL(API_ORIGIN).hostname, "fonts.googleapis.com", "fonts.gstatic.com"];
+const CDN_ORIGIN = "https://esm.sh";
+const ALLOWED_HOSTS = [self.location.origin, CDN_ORIGIN, new URL(API_ORIGIN).hostname, "fonts.googleapis.com", "fonts.gstatic.com"];
+
+let announcedApiOrigin = null;
+
+
+const SYNC_TAG = "sync-outbox";
+const OUTBOX_DB = "wlweb";
+const OUTBOX_STORE = "outbox";
+
+function openOutboxDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(OUTBOX_DB);
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+    request.onblocked = () => console.warn("[SW] IndexedDB bloqueado por otra pestaña");
+  });
+}
+
+function storeOp(db, mode, run) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(OUTBOX_STORE, mode);
+    const request = run(tx.objectStore(OUTBOX_STORE));
+    let result;
+    request.onsuccess = () => { result = request.result; };
+    request.onerror = () => reject(request.error);
+    tx.oncomplete = () => resolve(result);
+    tx.onerror = () => reject(tx.error);
+    tx.onabort = () => reject(tx.error);
+  });
+}
+
+const outboxGetAll = (db) => storeOp(db, "readonly", (s) => s.getAll());
+const outboxGet = (db, id) => storeOp(db, "readonly", (s) => s.get(id));
+const outboxDelete = (db, id) => storeOp(db, "readwrite", (s) => s.delete(id));
+const outboxPut = (db, item) => storeOp(db, "readwrite", (s) => s.put(item));
 
 const APP_SHELL = [
   "./",
@@ -59,7 +94,6 @@ const APP_SHELL = [
   "./src/config.js",
   "./src/main.js",
   "./src/router/router.js",
-  "./src/services/activityLogger.js",
   "./src/services/apiClient.js",
   "./src/services/authService.js",
   "./src/services/backgroundsService.js",
@@ -77,6 +111,8 @@ const APP_SHELL = [
   "./src/services/tilesService.js",
   "./src/services/topicsService.js",
   "./src/utils/cnnStatus.js",
+  "./src/utils/backgroundSync.js",
+  "./src/utils/outboxUI.js",
   "./src/utils/errorMessage.js",
   "./src/utils/installButton.js",
   "./src/utils/installPrompt.js",
@@ -123,15 +159,24 @@ const APP_SHELL = [
   "./styles/main.css",
   "./styles/shell.css",
   "https://fonts.googleapis.com/css2?family=Jomhuria&display=swap",
-  "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0",
-  "https://wires-and-ladders-api.vercel.app"
+  "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
 ];
 
 self.addEventListener("install", (event) => {
   console.log("[SW] install => precacheando", CACHE_VERSION);
 
-  event.waitUntil(caches.open(CACHE_VERSION).then((cache) => cache.addAll(APP_SHELL)));
-
+  event.waitUntil(
+    caches.open(CACHE_VERSION).then(async (cache) => {
+      const results = await Promise.allSettled(
+        APP_SHELL.map((url) => cache.add(url))
+      );
+      const failed = results
+        .map((r, i) => (r.status === "rejected" ? APP_SHELL[i] : null))
+        .filter(Boolean);
+      console.log("[SW] Precaché:", APP_SHELL.length - failed.length, "ok,", failed.length, "falló");
+      if (failed.length) console.warn("[SW] No se pudieron cachear:", failed);
+    })
+  );
 });
 
 self.addEventListener("activate", (event) => {
@@ -149,7 +194,6 @@ self.addEventListener("activate", (event) => {
 })
 
 self.addEventListener("fetch", (event) => {
-  //console.log("[SW] fetch => ", event.request.method, event.request.url);
   const { request } = event;
 
   if (!shouldHandle(request)) {
@@ -162,12 +206,19 @@ self.addEventListener("fetch", (event) => {
   );
 });
 
+function isApiUrl(url) {
+  return url.origin === API_ORIGIN ||
+    (announcedApiOrigin !== null && url.origin === announcedApiOrigin);
+}
+
 function shouldHandle(request) {
   if (request.method !== "GET") return false;
 
   const url = new URL(request.url);
 
   if (url.origin === self.location.origin) return true;
+
+  if (isApiUrl(url)) return true;
 
   if (ALLOWED_HOSTS.includes(url.hostname)) return true;
 
@@ -187,9 +238,10 @@ async function handleRequest(event) {
 function pickStrategy(request) {
   const url = new URL(request.url);
 
-  if (url.origin === API_ORIGIN) {
+  if (isApiUrl(url)) {
     if (url.pathname.includes("/education/knowledge_area")) return staleWhileRevalidate;
     if (url.pathname.includes("/education/discipline")) return staleWhileRevalidate;
+    if (url.pathname.includes("/education/levels")) return staleWhileRevalidate;
     if (url.pathname.includes("/sync/tile-types")) return staleWhileRevalidate;
     return networkFirst;
   }
@@ -303,6 +355,12 @@ self.addEventListener("message", (event) => {
   if (event.data === "SKIP_WAITING") {
     console.log("[SW] Mensaje SKIP_WAITING recibido, forzando activación");
     self.skipWaiting();
+    return;
+  }
+
+  if (event.data?.type === "SET_API_ORIGIN") {
+    announcedApiOrigin = event.data.origin ?? null;
+    console.log("[SW] Origen de API anunciado:", announcedApiOrigin ?? "(ninguno)");
   }
 });
 
@@ -313,5 +371,114 @@ function reportFetch(request, source, strategy) {
     clients.forEach((client) =>
       client.postMessage({ type: "FETCH_LOG", method: request.method, path, strategy, source })
     );
+  });
+}
+
+
+self.addEventListener("sync", (event) => {
+  if (event.tag !== SYNC_TAG) return;
+
+  // lastChance = true: si este intento falla, el navegador ya no reintentará.
+  console.log("[SW] sync =>", event.tag, "· lastChance:", event.lastChance);
+  event.waitUntil(flushOutbox(event.lastChance === true));
+});
+
+let flushing = false;
+
+async function flushOutbox(isLastChance) {
+  if (flushing) {
+    console.log("[SW] Ya hay un vaciado en curso, se omite este sync");
+    return;
+  }
+  flushing = true;
+
+  const db = await openOutboxDB();
+
+  try {
+    if (!db.objectStoreNames.contains(OUTBOX_STORE)) {
+      console.warn("[SW] El store outbox aún no existe, nada que enviar");
+      return;
+    }
+
+    const pending = await outboxGetAll(db);
+    console.log("[SW] Cola de salida =>", pending.length, "pendiente(s)");
+
+    for (const item of pending) {
+      if (item.needsAttention) {
+        console.warn("[SW] Se omite (requiere atención) =>", item.label);
+        continue;
+      }
+
+      const current = await outboxGet(db, item.id);
+      if (!current) {
+        console.log("[SW] El item ya no está en la cola, se omite =>", item.label);
+        continue;
+      }
+      const live = { ...item, ...current };
+
+      let response;
+      try {
+        response = await fetch(live.url, {
+          method: live.method ?? "POST",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: live.token || "NoToken",
+          },
+          body: JSON.stringify(live.payload),
+        });
+      } catch (error) {
+        await outboxPut(db, {
+          ...live,
+          attempts: (live.attempts ?? 0) + 1,
+          lastError: "Sin conexión",
+          lastAttemptAt: new Date().toISOString(),
+        });
+        throw error;
+      }
+
+      if (!response.ok) {
+        const permanent = response.status >= 400 && response.status < 500;
+        await outboxPut(db, {
+          ...live,
+          attempts: (live.attempts ?? 0) + 1,
+          lastError: `HTTP ${response.status}`,
+          lastAttemptAt: new Date().toISOString(),
+          needsAttention: permanent || isLastChance,
+        });
+        notifyClients({
+          type: permanent || isLastChance ? "OUTBOX_ATTENTION" : "OUTBOX_RETRY",
+          id: live.id,
+          label: live.label,
+          status: response.status,
+        });
+        console.warn("[SW] Rechazado por el servidor =>", live.label, response.status);
+
+        if (permanent || isLastChance) continue;
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const data = await response.json().catch(() => ({}));
+      // Sólo se borra cada elemento tras la confirmación del servidor.
+      await outboxDelete(db, live.id);
+      console.log("[SW] Enviado y borrado de la cola =>", live.label);
+
+      notifyClients({
+        type: "OUTBOX_SENT",
+        id: live.id,
+        label: live.label,
+        serverId: data?.id ?? null,
+        disciplineId: live.disciplineId ?? null,
+        levelId: live.levelId ?? null,
+      });
+    }
+  } finally {
+    db.close();
+    flushing = false;
+  }
+}
+
+function notifyClients(message) {
+  self.clients.matchAll({ type: "window" }).then((clients) => {
+    clients.forEach((client) => client.postMessage(message));
   });
 }

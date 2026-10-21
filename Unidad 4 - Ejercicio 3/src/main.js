@@ -2,7 +2,6 @@ import Router from "./router/router.js";
 import { getApiBaseUrl } from "./config.js";
 import { initTheme } from "./services/themeService.js";
 import { initAuth } from "./services/authService.js";
-import { initActivityLogger } from "./services/activityLogger.js";
 import { initConnectionStatus } from "./utils/cnnStatus.js";
 import { initInstallPrompt } from "./utils/installPrompt.js";
 import { initInstallButton } from "./utils/installButton.js";
@@ -22,6 +21,8 @@ import AboutView from "./views/AboutView.js";
 import TileDetailView from "./views/TileDetailView.js";
 import ContactView from "./views/ContactView.js";
 import { registerServiceWorker } from "./utils/registerSW.js";
+import { initBackgroundSync } from "./utils/backgroundSync.js";
+import { mountOutboxUI } from "./utils/outboxUI.js";
 import ServiceWorkerView from "./views/ServiceWorkerView.js";
 import FetchLabView from "./views/FetchLabView.js";
 
@@ -53,12 +54,13 @@ initInstallButton();
 
 getApiBaseUrl();
 await initAuth();
-initActivityLogger();
 mountUserShell();
 initTheme();
 
 router.init();
 initConnectionStatus();
+initBackgroundSync();
+mountOutboxUI();
 
 if (document.readyState === "complete") {
   registerServiceWorker();

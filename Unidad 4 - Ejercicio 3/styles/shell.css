@@ -281,6 +281,208 @@ body {
   display: none;
 }
 
+/* ---------- Outbox: chip de pendientes + panel de estado ---------- */
+.outbox-chip {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.55rem;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--shell-text);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.outbox-chip[hidden] {
+  display: none;
+}
+
+.outbox-chip .material-symbols-outlined {
+  font-size: 1rem;
+}
+
+.outbox-chip:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.outbox-chip:active {
+  transform: scale(0.94);
+}
+
+.outbox-chip:focus-visible {
+  outline: 2px solid var(--shell-text);
+  outline-offset: 2px;
+}
+
+/* Un 4xx dejó el item atorado: se avisa con color de alerta. */
+.outbox-chip.has-attention {
+  background: rgba(239, 68, 68, 0.28);
+  border-color: rgba(239, 68, 68, 0.85);
+}
+
+.outbox-panel {
+  position: fixed;
+  top: 4.5rem;
+  right: 1rem;
+  z-index: 60;
+  width: min(22rem, calc(100vw - 2rem));
+  max-height: min(32rem, calc(100vh - 6rem));
+  overflow-y: auto;
+  padding: 1rem;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  background: var(--card-bg);
+  color: var(--heading-color);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+}
+
+.outbox-panel[hidden] {
+  display: none;
+}
+
+.outbox-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.outbox-panel__title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.outbox-panel__close {
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.outbox-panel__mode {
+  margin: 0.5rem 0 0.75rem;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.outbox-panel__mode.is-offline {
+  opacity: 1;
+  font-weight: 600;
+}
+
+.outbox-retry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: 100%;
+  justify-content: center;
+  padding: 0.55rem;
+  border: 0;
+  border-radius: calc(var(--radius) / 1.5);
+  background: var(--link-color);
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.outbox-retry-btn[hidden] {
+  display: none;
+}
+
+.outbox-retry-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.outbox-panel__section {
+  margin-top: 1rem;
+}
+
+.outbox-panel__subtitle {
+  margin: 0 0 0.4rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+}
+
+.outbox-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.outbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--card-border);
+  border-radius: calc(var(--radius) / 1.5);
+  font-size: 0.82rem;
+}
+
+.outbox-item__label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.outbox-item--sent {
+  opacity: 0.7;
+}
+
+.outbox-badge {
+  flex: none;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.08);
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+.outbox-badge--ok {
+  background: rgba(34, 197, 94, 0.18);
+}
+
+.outbox-badge--error {
+  background: rgba(239, 68, 68, 0.22);
+  font-weight: 700;
+}
+
+.outbox-discard {
+  flex: none;
+  border: 0;
+  background: none;
+  color: #ef4444;
+  font-size: 0.72rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.outbox-empty {
+  margin: 0;
+  font-size: 0.82rem;
+  opacity: 0.65;
+}
+
+.outbox-empty[hidden] {
+  display: none;
+}
+
 /* ---------- Formulario de login (dentro de /configuracion) ----------*/
 .login-card {
   max-width: 28rem;
