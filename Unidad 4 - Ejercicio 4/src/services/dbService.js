@@ -1,11 +1,15 @@
 import { openDB } from "https://esm.sh/idb@8";
 
 export const DB_NAME = "wlweb";
-export const DB_VERSION = 3;
+export const DB_VERSION = 4;
 export const STORE = "api_topics";
 export const INDEX = "by_id";
 
 export const OUTBOX_STORE = "outbox";
+
+// Subtemas que este usuario ya importó desde un enlace compartido.
+// La clave es el id del subtema original (quien lo compartió).
+export const SHARED_STORE = "shared_subtopics";
 
 const dbPromise = openDB(DB_NAME, DB_VERSION, {
   upgrade(db, oldVersion) {
@@ -24,6 +28,11 @@ const dbPromise = openDB(DB_NAME, DB_VERSION, {
         keyPath: "id",
         autoIncrement: true,
       });
+    }
+
+    // v4 · +shared_subtopics (subtemas importados por enlace compartido).
+    if (!db.objectStoreNames.contains(SHARED_STORE)) {
+      db.createObjectStore(SHARED_STORE, { keyPath: "id" });
     }
 
     console.log("[db] upgrade", oldVersion, "→", DB_VERSION);
@@ -76,3 +85,13 @@ export const patchOutbox = wrap(async (id, patch) => {
   await tx.done;
   return { ...current, ...patch, id };
 });
+
+// Marca un subtema compartido como ya importado en esta cuenta.
+export const saveSharedSubtopic = wrap(async (record) =>
+  (await dbPromise).put(SHARED_STORE, record)
+);
+
+// Devuelve el registro del subtema ya importado, o null si no existe.
+export const getSharedSubtopic = wrap(async (id) =>
+  (await dbPromise).get(SHARED_STORE, id)
+);

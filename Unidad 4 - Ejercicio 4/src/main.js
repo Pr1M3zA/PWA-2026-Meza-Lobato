@@ -8,6 +8,7 @@ import { initInstallButton } from "./utils/installButton.js";
 import mountUserShell from "./components/UserShell.js";
 import HomeView from "./views/HomeView.js";
 import EditView from "./views/EditView.js";
+import ShareView from "./views/ShareView.js";
 import AreasConocimientoView from "./views/AreasConocimientoView.js";
 import DisciplinasView from "./views/DisciplinasView.js";
 import TemasView from "./views/TemasView.js";
@@ -43,6 +44,7 @@ const routes = [
   { path: "/acerca", view: AboutView },
   { path: "/contacto", view: ContactView },
   { path: "/tile/:id", view: TileDetailView },
+  { path: "/compartir", view: ShareView },
 ];
 
 const app = document.getElementById("app");

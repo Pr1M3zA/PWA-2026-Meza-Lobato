@@ -1,19 +1,35 @@
 import SubtopicCard from "../components/SubtopicCard.js";
 import { breadcrumbHTML } from "../components/Breadcrumb.js";
 import EmptyState from "../components/EmptyState.js";
-import {
-  subtopicFormModalHTML,
-  setupSubtopicModal,
-} from "../components/SubtopicFormModal.js";
-import {
-  confirmModalHTML,
-  setupConfirmModal,
-} from "../components/ConfirmModal.js";
+import { subtopicFormModalHTML, setupSubtopicModal } from "../components/SubtopicFormModal.js";
+import { confirmModalHTML, setupConfirmModal } from "../components/ConfirmModal.js";
 import loadTemplate from "../utils/templateLoader.js";
 import { getErrorMessage } from "../utils/errorMessage.js";
 import { importWithRetry } from "../utils/moduleLoader.js";
 import { getCurrentUser } from "../services/authService.js";
+import { BASE_URL } from "../config.js";
+import { shareContent, encodeSharePayload } from "../utils/share.js";
 import ErrorView from "./ErrorView.js";
+
+// Campos de una pregunta que la API necesita para crearla.
+const QUESTION_FIELDS = [
+  "information",
+  "question",
+  "answer_1",
+  "answer_2",
+  "answer_3",
+  "answer_4",
+  "answer_ok",
+];
+
+// Mensaje del enlace:_txt_ va en los datos, no en la URL.
+function buildShareText(subtopic, discipline, count) {
+  return (
+    `¡Te comparto el subtema «${subtopic.description}» con sus ${count} ` +
+    `pregunta${count === 1 ? "" : "s"} de ${discipline}! Ábrelo en el Panel Educativo de Wires&Ladders ` +
+    `y agrégalo a tus temas con un solo clic ✨`
+  );
+}
 
 export default async function SubtemasView(params) {
   const idtopic = params?.idtopic;
@@ -152,6 +168,98 @@ export default async function SubtemasView(params) {
         }
       }
 
+      // Comparte un subtema: arma el enlace con el subtema y sus preguntas,
+      // y lo manda al menú nativo del sistema (o al portapapeles).
+      async function shareSubtopic(sub, button) {
+        const originalLabel = button.getAttribute("title");
+        button.disabled = true;
+        try {
+          const [
+            { default: TopicsService },
+            { default: InfoAndQuestionsService },
+          ] = await Promise.all([
+            importWithRetry(
+              new URL("../services/topicsService.js", import.meta.url).href
+            ),
+            importWithRetry(
+              new URL(
+                "../services/infoAndQuestionsService.js",
+                import.meta.url
+              ).href
+            ),
+          ]);
+
+          const [topic, questions] = await Promise.all([
+            new TopicsService().getById(idtopic),
+            new InfoAndQuestionsService().getBySubtopic(sub.id),
+          ]);
+
+          // Solo se mandan los campos que la API necesita para recrearlos.
+          const cleanQuestions = questions.map((q) => {
+            const item = {};
+            for (const field of QUESTION_FIELDS) item[field] = q[field] ?? "";
+            return item;
+          });
+
+          const payload = {
+            subtopic: {
+              id: sub.id,
+              description: sub.description,
+              details: sub.details ?? "",
+            },
+            topic: {
+              description: topic?.description ?? topicDescription,
+              details: topic?.details ?? "",
+            },
+            // La disciplina y el nivel son catálogo global: sus ids son
+            // válidos para cualquier usuario que abra el enlace.
+            discipline: {
+              id: topic?.id_discipline ?? iddisc,
+              name: disciplineDescription,
+            },
+            level: { id: topic?.id_level ?? null },
+            questions: cleanQuestions,
+          };
+
+          const encoded = encodeSharePayload(payload);
+          const url = `${location.origin}/${BASE_URL}/compartir?p=${encoded}`;
+          const text = buildShareText(
+            payload.subtopic,
+            payload.discipline.name,
+            cleanQuestions.length
+          );
+
+          const result = await shareContent({ title: "Wires&Ladders", text, url });
+
+          if (result === "copied") {
+            showShareNotice(
+              "No hay menú de compartir en este navegador: el enlace quedó copiado al portapapeles."
+            );
+          }
+        } catch (e) {
+          showShareNotice(getErrorMessage(e));
+        } finally {
+          button.disabled = false;
+          if (originalLabel) button.setAttribute("title", originalLabel);
+        }
+      }
+
+      // Aviso temporal en la parte superior de la lista de subtemas.
+      let shareNoticeTimer = null;
+      function showShareNotice(message) {
+        let notice = document.getElementById("share-notice");
+        if (!notice) {
+          notice = document.createElement("p");
+          notice.id = "share-notice";
+          notice.className = "topic-stale-banner";
+          container.prepend(notice);
+        }
+        notice.textContent = message;
+        notice.hidden = false;
+        clearTimeout(shareNoticeTimer);
+        shareNoticeTimer = setTimeout(() => (notice.hidden = true), 6000);
+      }
+
       addBtn.addEventListener("click", () => {
         if (subtopicModalCtrl) subtopicModalCtrl.openAdd();
       });
@@ -165,6 +273,14 @@ export default async function SubtemasView(params) {
             (s) => String(s.id) === editBtn.dataset.subtopicId
           );
           if (sub && subtopicModalCtrl) subtopicModalCtrl.openEdit(sub);
+          return;
+        }
+        const shareBtn = event.target.closest('[data-action="share-subtopic"]');
+        if (shareBtn) {
+          const sub = subtopics.find(
+            (s) => String(s.id) === shareBtn.dataset.subtopicId
+          );
+          if (sub) await shareSubtopic(sub, shareBtn);
           return;
         }
         const deleteBtn = event.target.closest('[data-action="delete-subtopic"]');

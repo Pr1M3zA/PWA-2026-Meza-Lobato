@@ -114,6 +114,160 @@ body {
   color: var(--link-color);
 }
 
+/* -----------------------------------------------------------
+   BLOQUE DE UBICACIÓN (Inicio)
+   Muestra el estado del permiso y el aviso temporal.
+   ----------------------------------------------------------- */
+.home-loc {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.home-loc h2 {
+  font-size: 1.25rem;
+  color: var(--heading-color);
+}
+
+.home-loc__text {
+  font-size: 0.9375rem;
+  color: var(--text-main);
+}
+
+.home-loc__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* El input de la alternativa manual ocupa el ancho disponible. */
+.home-loc__row .form-input {
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.home-loc__manual {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.25rem;
+  border-top: 1px dashed var(--card-border);
+}
+
+.loc-chip {
+  font-size: 0.8125rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 999px;
+  border: 1px solid var(--card-border);
+  background: var(--tag-bg);
+  color: var(--link-color);
+}
+
+.loc-chip[data-state="granted"] {
+  border-color: var(--answer-green-color);
+  color: var(--answer-green-text);
+  background: var(--answer-green-bg);
+}
+
+.loc-chip[data-state="denied"] {
+  border-color: var(--answer-red-color);
+  color: var(--answer-red-text);
+  background: var(--answer-red-bg);
+}
+
+.loc-notice {
+  font-size: 0.9375rem;
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--card-border);
+  background: var(--tag-bg);
+  color: var(--text-main);
+}
+
+/* Enlace "Ver en el mapa" dentro del aviso. */
+.loc-notice a {
+  color: var(--link-color);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.loc-notice a:hover {
+  text-decoration: underline;
+}
+
+/* -----------------------------------------------------------
+   PANTALLA: SUBTEMA COMPARTIDO (/compartir)
+   ----------------------------------------------------------- */
+.share-view {
+  max-width: 34rem;
+  margin: 0 auto;
+}
+
+.share-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.share-card__lead {
+  font-size: 1rem;
+  color: var(--text-main);
+}
+
+.share-card__details {
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.75rem;
+  background: var(--bg-main);
+}
+
+.share-card__details summary {
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--link-color);
+}
+
+.shared-questions {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.shared-question {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.shared-question__index {
+  flex: 0 0 1.5rem;
+  height: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--tag-bg);
+  color: var(--tag-color);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.shared-question__text {
+  font-size: 0.9375rem;
+  color: var(--text-main);
+}
+
+.shared-question__info {
+  font-size: 0.8125rem;
+  color: var(--muted-color);
+}
+
 /* Tablet: 2 columnas */
 @media (min-width: 640px) {
   .home-grid {

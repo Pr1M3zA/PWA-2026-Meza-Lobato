@@ -43,6 +43,7 @@ const TITLES = {
   "/configuracion": "Configuración",
   "/acerca": "Acerca de",
   "/contacto": "Contacto",
+  "/compartir": "Subtema compartido",
 };
 function titleFor(path) {
   if (TITLES[path]) return TITLES[path];

@@ -22,6 +22,9 @@ export default function SubtopicCard(subtopic, disciplineColor, canEdit) {
         <header class="topic-header">
           <span class="topic-level">${questionsCount} preguntas</span>
           <div class="topic-actions">
+            <button type="button" class="topic-icon-btn" data-action="share-subtopic" data-subtopic-id="${id}" aria-label="Compartir subtema" title="Compartir subtema">
+              <span class="material-symbols-outlined" aria-hidden="true">share</span>
+            </button>
             <button type="button" class="topic-icon-btn" data-action="delete-subtopic" data-subtopic-id="${id}" ${deleteDisabledAttr} aria-label="Eliminar subtema" title="${deleteTitle}">
               <span class="material-symbols-outlined" aria-hidden="true">delete</span>
             </button>
