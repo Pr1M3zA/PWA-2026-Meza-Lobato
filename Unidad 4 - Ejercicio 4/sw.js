@@ -9,7 +9,7 @@ console.log("[SW] typeof caches => ", typeof caches);
 
 console.log("[SW] Scope => ", self.registration.scope);
 
-const CACHE_VERSION = "wl-shell-v13";
+const CACHE_VERSION = "wl-shell-v9";
 
 const API_ORIGIN = "https://wires-and-ladders-api.vercel.app";
 const CDN_ORIGIN = "https://esm.sh";
