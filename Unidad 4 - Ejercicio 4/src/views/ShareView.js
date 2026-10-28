@@ -23,15 +23,21 @@ function escapeHTML(value) {
 }
 
 // La API no siempre devuelve la misma forma al crear: puede ser un objeto con
-// "id" o un arreglo de filas. Extraemos el id en ambos casos.
+// "id", con "insertId" (temas y subtemas) o un arreglo de filas.
 function pickId(response) {
   if (response == null) return null;
   if (typeof response === "object" && !Array.isArray(response)) {
-    return response.id ?? response.idsubtopic ?? response.id_topic ?? null;
+    return (
+      response.id ??
+      response.insertId ??
+      response.idsubtopic ??
+      response.id_topic ??
+      null
+    );
   }
   if (Array.isArray(response)) {
     const row = response[0];
-    return row?.id ?? row?.idsubtopic ?? null;
+    return row?.id ?? row?.insertId ?? null;
   }
   return null;
 }
@@ -232,6 +238,12 @@ export default async function ShareView() {
         for (const q of questions) {
           const body = {};
           for (const field of IMPORT_FIELDS) body[field] = q[field] ?? "";
+          // La API espera la respuesta correcta como número (1 a 4).
+          body.answer_ok = Number(body.answer_ok) || 1;
+          console.log(
+            `[Share] Enviando pregunta al subtema ${newSubtopicId}:`,
+            { id_subtopic: newSubtopicId, ...body }
+          );
           await questionsService.create({ id_subtopic: newSubtopicId, ...body });
         }
 
@@ -246,6 +258,9 @@ export default async function ShareView() {
         noticeEl.textContent = `El subtema «${subtopic.description}» ya está en tu cuenta, junto con sus ${questionCount} pregunta${questionCount === 1 ? "" : "s"}.`;
         noticeEl.hidden = false;
       } catch (e) {
+        // Se registra el error real (status y mensaje del servidor) para poder
+        // ver en la consola qué está rechazando la API.
+        console.error("[Share] Falló la importación:", e);
         actionBtn.disabled = false;
         actionBtn.textContent = "Agregar a mis subtemas";
         showError(getErrorMessage(e));

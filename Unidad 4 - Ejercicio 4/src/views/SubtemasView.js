@@ -194,6 +194,17 @@ export default async function SubtemasView(params) {
             new InfoAndQuestionsService().getBySubtopic(sub.id),
           ]);
 
+          // El nivel vive en el tema: sin él el receptor no puede ubicar el
+          // subtema, así que avisamos en vez de mandar un enlace roto.
+          const levelId = topic?.id_level ?? null;
+          const disciplineId = topic?.id_discipline ?? iddisc;
+          if (!levelId || !disciplineId) {
+            showShareNotice(
+              "No se pudo compartir: no encontramos el nivel y la disciplina del tema. Recarga la página e inténtalo de nuevo."
+            );
+            return;
+          }
+
           // Solo se mandan los campos que la API necesita para recrearlos.
           const cleanQuestions = questions.map((q) => {
             const item = {};
@@ -214,10 +225,10 @@ export default async function SubtemasView(params) {
             // La disciplina y el nivel son catálogo global: sus ids son
             // válidos para cualquier usuario que abra el enlace.
             discipline: {
-              id: topic?.id_discipline ?? iddisc,
+              id: disciplineId,
               name: disciplineDescription,
             },
-            level: { id: topic?.id_level ?? null },
+            level: { id: levelId },
             questions: cleanQuestions,
           };
 

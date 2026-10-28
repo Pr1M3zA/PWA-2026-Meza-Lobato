@@ -24,11 +24,18 @@ export default class InfoAndQuestionsService {
       token
     );
     if (!res.ok) {
-      const err = new Error(`HTTP ${res.status}`);
+      // Guardamos lo que devolvió el servidor: sirve para ver el motivo real
+      // en la consola y para mostrar un mensaje útil.
+      const serverMessage = await res.text().catch(() => "");
+      const err = new Error(
+        `HTTP ${res.status}${serverMessage ? ` · ${serverMessage}` : ""}`
+      );
       err.status = res.status;
+      err.serverMessage = serverMessage;
       throw err;
     }
-    return res.json();
+    // El servidor puede responder sin cuerpo JSON: no debe romper la importación.
+    return res.json().catch(() => null);
   }
 
   async update({ id, id_subtopic, information, question, answer_1, answer_2, answer_3, answer_4, answer_ok }) {
