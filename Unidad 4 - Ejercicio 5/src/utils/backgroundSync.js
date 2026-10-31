@@ -1,4 +1,4 @@
-import { getApiBaseUrl } from "../config.js";
+import { getApiBaseUrl, BASE_URL } from "../config.js";
 import { addToOutbox, countOutbox, getOutbox, patchOutbox, removeFromOutbox } from "../services/dbService.js";
 import { getToken } from "../services/authService.js";
 
@@ -27,6 +27,29 @@ export function getSyncMode() {
 
 function notifyChange() {
   window.dispatchEvent(new CustomEvent(OUTBOX_CHANGED_EVENT));
+}
+
+function routeForItem(item) {
+  if (item?.disciplineId) return `editar/temas/${item.disciplineId}`;
+  return "editar";
+}
+
+async function showLocalNotification({ title, body, tag, item }) {
+  if (typeof Notification === "undefined" || Notification.permission !== "granted") return;
+  try {
+    const registration = await navigator.serviceWorker.ready;
+    const appBase = `${window.location.origin}/${BASE_URL}/`;
+    await registration.showNotification(title, {
+      body,
+      tag,
+      // Ruta absoluta: la notificación debe verse igual desde cualquier ruta del SPA.
+      icon: new URL("icons/icon-192.png", appBase).href,
+      badge: new URL("icons/favicon-32.png", appBase).href,
+      data: { url: appBase + routeForItem(item) },
+    });
+  } catch (error) {
+    console.warn("[PWA] No se pudo mostrar la notificación local: ", error);
+  }
 }
 
 function logSent(label, via, serverId) {
@@ -99,6 +122,7 @@ export async function retryNow() {
   retrying = true;
   let sent = 0;
   let attention = 0;
+  let lastSent = null;
 
   try {
     for (const item of await getOutbox()) {
@@ -134,8 +158,15 @@ export async function retryNow() {
           lastAttemptAt: new Date().toISOString(),
           needsAttention: permanent,
         });
-        if (permanent) attention++;
-        else break;
+        if (permanent) {
+          attention++;
+          showLocalNotification({
+            title: "Revisa tu cola de sincronización",
+            body: `«${item.label ?? "Cambio"}» no pudo enviarse (HTTP ${response.status}). Es probable que la sesión haya expirado: vuelve a iniciar sesión.`,
+            tag: "wl-outbox-atencion",
+            item,
+          });
+        } else break;
         continue;
       }
 
@@ -144,9 +175,21 @@ export async function retryNow() {
       await removeFromOutbox(item.id);
       logSent(item.label, "Reintento desde la página", data?.id ?? null);
       sent++;
+      lastSent = item;
     }
   } finally {
     retrying = false;
+  }
+
+  if (sent > 0) {
+    showLocalNotification({
+      title: "Conexión restablecida ✓",
+      body: sent === 1
+        ? `Se envió el cambio pendiente: «${lastSent?.label ?? "Tema"}».`
+        : `Se enviaron ${sent} cambios pendientes, el último: «${lastSent?.label ?? "Tema"}».`,
+      tag: "wl-outbox-sincronizado",
+      item: lastSent,
+    });
   }
 
   const remaining = await countOutbox();

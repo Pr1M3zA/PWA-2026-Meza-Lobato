@@ -434,7 +434,8 @@ body {
 .settings-list {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0.875rem;
+  gap: 1.25rem;
+  align-content: start;
 }
 
 .setting-card {

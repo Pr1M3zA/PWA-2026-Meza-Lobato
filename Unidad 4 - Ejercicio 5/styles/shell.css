@@ -483,6 +483,66 @@ body {
   display: none;
 }
 
+/* ---------- Campana de permisos de notificación (shell) + sección en Configuración ---------- */
+.notify-btn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--shell-text);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.notify-btn[hidden] {
+  display: none;
+}
+
+.notify-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.notify-btn:active {
+  transform: scale(0.94);
+}
+
+.notify-btn:focus-visible {
+  outline: 2px solid var(--shell-text);
+  outline-offset: 2px;
+}
+
+/* Card de notificaciones bloqueadas dentro de /configuracion */
+.notify-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.notify-card h3 .material-symbols-outlined {
+  font-size: 1.25rem;
+  color: #ef4444;
+}
+
+.notify-card ol {
+  margin: 0 0 0.5rem;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.notify-card .notify-note {
+  font-size: 0.78rem;
+  opacity: 0.75;
+  margin: 0;
+}
+
 /* ---------- Formulario de login (dentro de /configuracion) ----------*/
 .login-card {
   max-width: 28rem;

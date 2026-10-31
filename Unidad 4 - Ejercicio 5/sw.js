@@ -9,7 +9,7 @@ console.log("[SW] typeof caches => ", typeof caches);
 
 console.log("[SW] Scope => ", self.registration.scope);
 
-const CACHE_VERSION = "wl-shell-v10";
+const CACHE_VERSION = "wl-shell-v11";
 
 const API_ORIGIN = "https://wires-and-ladders-api.vercel.app";
 const CDN_ORIGIN = "https://esm.sh";
@@ -21,6 +21,25 @@ let announcedApiOrigin = null;
 const SYNC_TAG = "sync-outbox";
 const OUTBOX_DB = "wlweb";
 const OUTBOX_STORE = "outbox";
+
+const APP_BASE = new URL(".", self.location.href).pathname; 
+function routeForItem(item) {
+  if (item?.disciplineId) return `editar/temas/${item.disciplineId}`;
+  return "editar";
+}
+
+function notifyOutbox({ title, body, tag, item }) {
+  const options = {
+    body,
+    tag, // mismo tag = el sistema reemplaza la anterior en vez de apilar duplicados
+    icon: new URL("icons/icon-192.png", self.location.href).href,
+    badge: new URL("icons/favicon-32.png", self.location.href).href,
+    data: { url: APP_BASE + routeForItem(item) },
+  };
+  self.registration.showNotification(title, options).catch((error) => {
+    console.warn("[SW] No se pudo mostrar la notificación:", error);
+  });
+}
 
 function openOutboxDB() {
   return new Promise((resolve, reject) => {
@@ -119,6 +138,7 @@ const APP_SHELL = [
   "./src/utils/share.js",
   "./src/utils/installButton.js",
   "./src/utils/installPrompt.js",
+  "./src/utils/notificationButton.js",
   "./src/utils/moduleLoader.js",
   "./src/utils/registerSW.js",
   "./src/utils/slugify.js",
@@ -373,6 +393,8 @@ async function flushOutbox(isLastChance) {
   flushing = true;
 
   const db = await openOutboxDB();
+  let sentCount = 0;
+  let lastSent = null;
 
   try {
     if (!db.objectStoreNames.contains(OUTBOX_STORE)) {
@@ -431,6 +453,14 @@ async function flushOutbox(isLastChance) {
           label: live.label,
           status: response.status,
         });
+        if (permanent || isLastChance) {
+          notifyOutbox({
+            title: "Revisa tu cola de sincronización",
+            body: `«${live.label ?? "Cambio"}» no pudo enviarse (HTTP ${response.status}). Es probable que la sesión haya expirado: vuelve a iniciar sesión.`,
+            tag: "wl-outbox-atencion",
+            item: live,
+          });
+        }
         console.warn("[SW] Rechazado por el servidor =>", live.label, response.status);
 
         if (permanent || isLastChance) continue;
@@ -441,6 +471,8 @@ async function flushOutbox(isLastChance) {
       // Sólo se borra cada elemento tras la confirmación del servidor.
       await outboxDelete(db, live.id);
       console.log("[SW] Enviado y borrado de la cola =>", live.label);
+      sentCount++;
+      lastSent = live;
 
       notifyClients({
         type: "OUTBOX_SENT",
@@ -454,6 +486,17 @@ async function flushOutbox(isLastChance) {
   } finally {
     db.close();
     flushing = false;
+
+    if (sentCount > 0) {
+      notifyOutbox({
+        title: "Conexión restablecida ✓",
+        body: sentCount === 1
+          ? `Se envió el cambio pendiente: «${lastSent?.label ?? "Tema"}».`
+          : `Se enviaron ${sentCount} cambios pendientes, el último: «${lastSent?.label ?? "Tema"}».`,
+        tag: "wl-outbox-sincronizado",
+        item: lastSent,
+      });
+    }
   }
 }
 
@@ -462,3 +505,24 @@ function notifyClients(message) {
     clients.forEach((client) => client.postMessage(message));
   });
 }
+
+/* ---------- notificationclick: cerrar el aviso y abrir/enfocar la pantalla relacionada ---------- */
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+
+  const targetUrl = event.notification.data?.url || APP_BASE;
+  const absoluteUrl = new URL(targetUrl, self.location.href).href;
+
+  event.waitUntil((async () => {
+    const windows = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+
+    for (const client of windows) {
+      await client.focus();
+      client.postMessage({ type: "NOTIFICATION_NAVIGATE", url: absoluteUrl });
+      return;
+    }
+
+    await self.clients.openWindow(absoluteUrl);
+  })());
+});

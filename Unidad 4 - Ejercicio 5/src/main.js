@@ -25,6 +25,7 @@ import ContactView from "./views/ContactView.js";
 import { registerServiceWorker } from "./utils/registerSW.js";
 import { initBackgroundSync } from "./utils/backgroundSync.js";
 import { mountOutboxUI } from "./utils/outboxUI.js";
+import { mountNotificationButton } from "./utils/notificationButton.js";
 
 
 const routes = [
@@ -62,6 +63,15 @@ router.init();
 initConnectionStatus();
 initBackgroundSync();
 mountOutboxUI();
+mountNotificationButton();
+
+// notificationclick en el SW: si la ventana ya estaba abierta, navega sin recargar.
+navigator.serviceWorker?.addEventListener("message", (event) => {
+  const data = event.data ?? {};
+  if (data.type === "NOTIFICATION_NAVIGATE" && data.url) {
+    router.navigate(new URL(data.url, window.location.href).pathname);
+  }
+});
 
 if (document.readyState === "complete") {
   registerServiceWorker();

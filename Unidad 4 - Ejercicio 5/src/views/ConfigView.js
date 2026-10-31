@@ -12,6 +12,31 @@ function paintInstallHelp() {
   summary.textContent = getInstallHelp();
 }
 
+/* ---------- Aviso de notificaciones bloqueadas ---------- */
+
+let notifyTrackerBound = false;
+
+async function paintNotifyCard() {
+  const section = document.getElementById("notify-section");
+  if (!section || typeof Notification === "undefined") return;
+  let state;
+  try {
+    state = (await navigator.permissions.query({ name: "notifications" })).state;
+  } catch {
+    state = Notification.permission;
+  }
+  section.hidden = state !== "denied";
+
+  if (notifyTrackerBound) return; // una sola escucha global para cambios de permiso
+  notifyTrackerBound = true;
+  try {
+    const status = await navigator.permissions.query({ name: "notifications" });
+    status.onchange = () => {
+      if (document.getElementById("notify-section")) paintNotifyCard();
+    };
+  } catch { /* sin Permissions API: no hay cambio que escuchar */ }
+}
+
 export default async function ConfigView() {
   const html = await loadTemplate("config.html", import.meta.url);
 
@@ -26,6 +51,8 @@ export default async function ConfigView() {
     
     paintInstallHelp();
     window.addEventListener("install-state-changed", paintInstallHelp);
+
+    await paintNotifyCard();
 
     // Llenar los campos de perfil con los datos del usuario autenticado.
     const user = getCurrentUser();

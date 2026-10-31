@@ -34,6 +34,21 @@
         <button id="logout-btn" class="btn btn-logout" type="button">Cerrar sesión</button>
       </p>
     </section>
+
+    <!-- Notificaciones: solo aparece si el navegador tiene el permiso BLOQUEADO -->
+    <section id="notify-section" class="setting-card notify-card" hidden>
+      <h3><span class="material-symbols-outlined" aria-hidden="true">notifications_off</span>Las notificaciones están bloqueadas</h3>
+      <p>El navegador ya no mostrará avisos de sincronización para este sitio. Para reactivarlos:</p>
+      <ol>
+        <li>Haz clic en el ícono del <strong>candado</strong> &#128274; en la barra de direcciones.</li>
+        <li>Abre <strong>“Permisos de este sitio”</strong> (o <strong>“Configuración del sitio”</strong>).</li>
+        <li>En <strong>Notificaciones</strong> cambia <em>Bloqueado</em> por
+            <strong>“Preguntar antes de bloquear”</strong> y guarda.</li>
+        <li>Recarga la página y acepta el aviso de permiso cuando aparezca.</li>
+      </ol>
+      <p class="notify-note">En Firefox: Menú ☰ → Ajustes → Privacidad y seguridad →
+        Notificaciones → <em>“Configuración…”</em> y quita este sitio de la lista de bloqueados.</p>
+    </section>
   </div>
 
   <p class="view-foot">
