@@ -1,0 +1,15 @@
+<div class="temas-view view-root">
+  <header class="temas-header view-header">
+    <div class="temas-header__text">
+      <nav class="breadcrumb" aria-label="Navegación">{{breadcrumb}}</nav>
+      <h1 class="view-title">Información, preguntas y respuestas</h1>
+    </div>
+    <button type="button" class="temas-add-btn" id="preguntas-add-btn">Agregar +</button>
+  </header>
+  <p class="view-lead view-toolbar">{{questionCount}} elementos en este subtema.</p>
+  <div id="question-container" class="question-grid view-content">
+    {{content}}
+  </div>
+  {{formModal}}
+  {{confirmModal}}
+</div>
