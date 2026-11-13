@@ -9,11 +9,10 @@ console.log("[SW] typeof caches => ", typeof caches);
 
 console.log("[SW] Scope => ", self.registration.scope);
 
-const CACHE_VERSION = "wl-shell-v11";
+const CACHE_VERSION = "wl-shell-v12";
 
-const API_ORIGIN = "https://wires-and-ladders-api.vercel.app";
 const CDN_ORIGIN = "https://esm.sh";
-const ALLOWED_HOSTS = [self.location.origin, CDN_ORIGIN, new URL(API_ORIGIN).hostname, "fonts.googleapis.com", "fonts.gstatic.com"];
+const ALLOWED_HOSTS = [self.location.origin, CDN_ORIGIN, "fonts.googleapis.com", "fonts.gstatic.com"];
 
 let announcedApiOrigin = null;
 
@@ -114,6 +113,7 @@ const APP_SHELL = [
   "./src/main.js",
   "./src/router/router.js",
   "./src/services/apiClient.js",
+  "./src/services/pushService.js",
   "./src/services/authService.js",
   "./src/services/backgroundsService.js",
   "./src/services/boardsService.js",
@@ -230,14 +230,18 @@ self.addEventListener("fetch", (event) => {
 });
 
 function isApiUrl(url) {
-  return url.origin === API_ORIGIN ||
-    (announcedApiOrigin !== null && url.origin === announcedApiOrigin);
+  return announcedApiOrigin !== null && url.origin === announcedApiOrigin;
 }
 
 function shouldHandle(request) {
-  if (request.method !== "GET") return false;
-
   const url = new URL(request.url);
+
+  // Push key/subscription requests must always reach the backend, never the app cache.
+  if (isApiUrl(url) && (url.pathname === "/push" || url.pathname.startsWith("/push/"))) {
+    return false;
+  }
+
+  if (request.method !== "GET") return false;
 
   if (url.origin === self.location.origin) return true;
 
@@ -526,3 +530,53 @@ self.addEventListener("notificationclick", (event) => {
     await self.clients.openWindow(absoluteUrl);
   })());
 });
+
+self.addEventListener("push", (event) => {
+  const message = readPushMessage(event);
+  const appScope = new URL(self.registration.scope);
+  const icon = new URL("icons/icon-192.png", appScope).href;
+  const badge = new URL("icons/favicon-32.png", appScope).href;
+  const targetUrl = safePushUrl(message.url, appScope);
+
+  event.waitUntil(self.registration.showNotification(message.title, {
+    body: message.body,
+    icon,
+    badge,
+    tag: message.tag,
+    data: { url: targetUrl },
+  }));
+});
+
+function readPushMessage(event) {
+  const fallback = {
+    title: "Wires&Ladders",
+    body: "Tienes una novedad en la app.",
+    url: "./",
+  };
+  if (!event.data) return fallback;
+
+  const text = event.data.text();
+  try {
+    const message = JSON.parse(text);
+    return {
+      ...fallback,
+      ...message,
+      title: typeof message.title === "string" ? message.title : fallback.title,
+      body: typeof message.body === "string" ? message.body : fallback.body,
+    };
+  } catch {
+    return { ...fallback, body: text || fallback.body };
+  }
+}
+
+function safePushUrl(value, appScope) {
+  try {
+    const target = new URL(typeof value === "string" ? value : "./", appScope);
+    if (target.origin === appScope.origin && target.pathname.startsWith(appScope.pathname)) {
+      return target.href;
+    }
+  } catch {
+    // Se cae a la raíz de la app si el destino no es una URL válida.
+  }
+  return appScope.href;
+}

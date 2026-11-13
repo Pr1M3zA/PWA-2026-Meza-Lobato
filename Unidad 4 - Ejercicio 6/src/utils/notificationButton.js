@@ -1,53 +1,71 @@
+import { getToken, isAuthenticated, subscribe as subscribeAuth } from '../services/authService.js';
+import { getSubscription, supportsPush, subscribeToPush, syncSubscription, unsubscribeFromPush } from '../services/pushService.js';
+
 let initialized = false;
 
-async function queryPermissionState() {
-  if (typeof Notification === "undefined") return "unsupported";
-  try {
-    const status = await navigator.permissions.query({ name: "notifications" });
-    const state = status.state === "prompt" ? "default" : status.state;
-    return state;
-  } catch {
-    return Notification.permission;
-  }
-}
-
-function paintButtons(state) {
-  const visible = state === "default";
-  document.querySelectorAll(".notify-btn").forEach((btn) => {
-    btn.hidden = !visible;
-  });
-}
-
-async function handleClick() {
-  const state = await queryPermissionState();
-  if (state !== "default") {
-    await repaint();
-    return;
-  }
-
-  const result = await Notification.requestPermission();
-  console.info("[PWA] El usuario respondió el permiso de notificaciones:", result);
-  await repaint();
-}
-
 async function repaint() {
-  const state = await queryPermissionState();
-  paintButtons(state);
-  return state;
+  if (!supportsPush()) return 'unsupported';
+
+  const permission = Notification.permission;
+  const authenticated = isAuthenticated();
+  let subscription = null;
+  if (authenticated && permission === 'granted') {
+    subscription = await getSubscription().catch(() => null);
+  }
+
+  document.querySelectorAll('.notify-btn').forEach((btn) => {
+    btn.hidden = !authenticated;
+    btn.disabled = permission === 'denied';
+    const active = Boolean(subscription);
+    const label = permission === 'denied'
+      ? 'Notificaciones bloqueadas en la configuración del navegador'
+      : active
+        ? 'Desactivar notificaciones push'
+        : 'Activar notificaciones push';
+    btn.title = label;
+    btn.setAttribute('aria-label', label);
+    const icon = btn.querySelector('.material-symbols-outlined');
+    if (icon) icon.textContent = active ? 'notifications_active' : 'notifications';
+  });
+
+  return permission;
+}
+
+async function handleClick(event) {
+  const button = event.currentTarget;
+  if (!isAuthenticated()) return;
+  button.disabled = true;
+
+  try {
+    let permission = Notification.permission;
+    if (permission === 'default') permission = await Notification.requestPermission();
+    if (permission !== 'granted') return;
+
+    if (await getSubscription()) {
+      await unsubscribeFromPush(getToken());
+    } else {
+      await subscribeToPush(getToken());
+    }
+  } catch (error) {
+    console.error('[PWA] No se pudo actualizar la suscripción push:', error);
+  } finally {
+    button.disabled = false;
+    await repaint();
+  }
 }
 
 export async function mountNotificationButton() {
   if (initialized) return;
   initialized = true;
 
-  if (typeof Notification === "undefined") {
+  if (!supportsPush()) {
     console.info("[PWA] Notification API no disponible, no se monta el control.");
     return;
   }
 
   const BTN_HTML = `
-    <button type="button" class="notify-btn" hidden aria-label="Activar notificaciones"
-            title="Permitir notificaciones de sincronización">
+    <button type="button" class="notify-btn" hidden aria-label="Activar notificaciones push"
+            title="Activar notificaciones push">
       <span class="material-symbols-outlined" aria-hidden="true">notifications</span>
     </button>
   `;
@@ -65,15 +83,26 @@ export async function mountNotificationButton() {
   });
 
   try {
-    const status = await navigator.permissions.query({ name: "notifications" });
-    status.onchange = () => {
-      console.info("[PWA] Cambió el permiso de notificaciones, repintando el control.");
-      repaint();
-    };
+    const permission = await navigator.permissions.query({ name: 'notifications' });
+    permission.onchange = () => repaint();
   } catch {
-    /* sin Permissions API: se pinta con Notification.permission */
+    // Notification.permission se vuelve a consultar al abrir la app o pulsar el control.
   }
 
+  subscribeAuth(({ user }) => {
+    repaint();
+    if (user) {
+      syncSubscription(getToken()).catch((error) => {
+        console.warn('[PWA] No se pudo sincronizar la suscripción push:', error.message);
+      });
+    }
+  });
+
   const state = await repaint();
-  console.info(`[PWA] Control de notificaciones montado · estado inicial: ${state}`);
+  if (isAuthenticated() && state === 'granted') {
+    syncSubscription(getToken()).catch((error) => {
+      console.warn('[PWA] No se pudo sincronizar la suscripción push:', error.message);
+    });
+  }
+  console.info(`[PWA] Control de notificaciones push montado · permiso: ${state}`);
 }

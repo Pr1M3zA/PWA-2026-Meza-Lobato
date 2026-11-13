@@ -1,6 +1,7 @@
 import { getCookie, setCookie, deleteCookie } from "./cookieService.js";
 import ApiClient from "./apiClient.js";
 import { getApiBaseUrl } from "../config.js";
+import { detachPushSubscription } from "./pushService.js";
 
 const TOKEN_COOKIE = "wl.token";
 const TOKEN_DAYS = 7;
@@ -72,6 +73,12 @@ export async function fetchUser(identifier = null) {
 }
 
 export function logout() {
+  const token = getToken();
+  if (token) {
+    detachPushSubscription(token).catch((error) => {
+      console.warn('[PWA] No se pudo desvincular el dispositivo al cerrar sesión:', error.message);
+    });
+  }
   deleteCookie(TOKEN_COOKIE);
   currentUser = null;
   emit({ user: null });
