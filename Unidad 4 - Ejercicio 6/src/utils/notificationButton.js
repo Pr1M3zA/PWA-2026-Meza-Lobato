@@ -1,5 +1,5 @@
 import { getToken, isAuthenticated, subscribe as subscribeAuth } from '../services/authService.js';
-import { getSubscription, supportsPush, subscribeToPush, syncSubscription, unsubscribeFromPush } from '../services/pushService.js';
+import { getSubscription, supportsPush, subscribeToPush, syncSubscription } from '../services/pushService.js';
 
 let initialized = false;
 
@@ -7,28 +7,29 @@ async function repaint() {
   if (!supportsPush()) return 'unsupported';
 
   const permission = Notification.permission;
-  const authenticated = isAuthenticated();
-  let subscription = null;
-  if (authenticated && permission === 'granted') {
-    subscription = await getSubscription().catch(() => null);
-  }
+  const visible = isAuthenticated() && permission === 'default';
 
   document.querySelectorAll('.notify-btn').forEach((btn) => {
-    btn.hidden = !authenticated;
-    btn.disabled = permission === 'denied';
-    const active = Boolean(subscription);
-    const label = permission === 'denied'
-      ? 'Notificaciones bloqueadas en la configuración del navegador'
-      : active
-        ? 'Desactivar notificaciones push'
-        : 'Activar notificaciones push';
-    btn.title = label;
-    btn.setAttribute('aria-label', label);
-    const icon = btn.querySelector('.material-symbols-outlined');
-    if (icon) icon.textContent = active ? 'notifications_active' : 'notifications';
+    btn.hidden = !visible;
   });
 
   return permission;
+}
+
+// Con permiso concedido la campanita se oculta, así que la suscripción se
+// mantiene sola: se recrea si se perdió y se reenvía al backend si ya existe.
+async function ensureSubscription() {
+  if (!isAuthenticated() || !supportsPush() || Notification.permission !== 'granted') return;
+
+  const token = getToken();
+  if (!token) return;
+
+  const subscription = await getSubscription().catch(() => null);
+  if (subscription) {
+    await syncSubscription(token);
+  } else {
+    await subscribeToPush(token);
+  }
 }
 
 async function handleClick(event) {
@@ -41,9 +42,7 @@ async function handleClick(event) {
     if (permission === 'default') permission = await Notification.requestPermission();
     if (permission !== 'granted') return;
 
-    if (await getSubscription()) {
-      await unsubscribeFromPush(getToken());
-    } else {
+    if (!(await getSubscription())) {
       await subscribeToPush(getToken());
     }
   } catch (error) {
@@ -89,20 +88,18 @@ export async function mountNotificationButton() {
     // Notification.permission se vuelve a consultar al abrir la app o pulsar el control.
   }
 
-  subscribeAuth(({ user }) => {
-    repaint();
+  subscribeAuth(async ({ user }) => {
+    await repaint();
     if (user) {
-      syncSubscription(getToken()).catch((error) => {
+      ensureSubscription().catch((error) => {
         console.warn('[PWA] No se pudo sincronizar la suscripción push:', error.message);
       });
     }
   });
 
   const state = await repaint();
-  if (isAuthenticated() && state === 'granted') {
-    syncSubscription(getToken()).catch((error) => {
-      console.warn('[PWA] No se pudo sincronizar la suscripción push:', error.message);
-    });
-  }
+  ensureSubscription().catch((error) => {
+    console.warn('[PWA] No se pudo sincronizar la suscripción push:', error.message);
+  });
   console.info(`[PWA] Control de notificaciones push montado · permiso: ${state}`);
 }
