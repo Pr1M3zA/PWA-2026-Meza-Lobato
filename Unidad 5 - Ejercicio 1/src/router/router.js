@@ -195,7 +195,7 @@ export default class Router {
         return;
       }
 
-      const html = await match.route.view(match.params);
+      const html = await this.renderView(match);
       // 5. Solo aquí se escribe contenido nuevo dentro del shell
       this.root.innerHTML = html;
       // Marca de error para que el listener "online" sepa si debe re-renderizar
@@ -209,6 +209,30 @@ export default class Router {
         this.render();
       }
     }
+  }
+
+  // Resuelve el módulo de la vista y devuelve su HTML.
+  // La vista puede venir ya resuelta (route.view) o como un import() dinámico
+  // (route.load), que es como se construyen las rutas en main.js.
+  async renderView(match) {
+    try {
+      const view = match.route.view ?? (await match.route.load()).default;
+      return await view(match.params);
+    } catch (error) {
+      console.error("[Router] No se pudo cargar la vista: ", error);
+      return this.getLoadErrorHTML();
+    }
+  }
+
+  // Respaldo cuando el módulo de la vista no se puede descargar.
+  getLoadErrorHTML() {
+    return `
+      <div class="card">
+        <h2>No se pudo cargar esta sección</h2>
+        <p>Revisa tu conexión e inténtalo de nuevo. Las secciones que ya visitaste
+        siguen disponibles sin conexión.</p>
+      </div>
+    `;
   }
 
   // Reemplaza el render actual por uno nuevo tras un redirect.

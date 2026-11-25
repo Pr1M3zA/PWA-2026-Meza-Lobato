@@ -9,7 +9,7 @@ console.log("[SW] typeof caches => ", typeof caches);
 
 console.log("[SW] Scope => ", self.registration.scope);
 
-const CACHE_VERSION = "wl-shell-v16";
+const CACHE_VERSION = "wl-shell-v17";
 
 const CDN_ORIGIN = "https://esm.sh";
 const ALLOWED_HOSTS = [self.location.origin, CDN_ORIGIN, "fonts.googleapis.com", "fonts.gstatic.com"];
@@ -96,7 +96,6 @@ const APP_SHELL = [
   "./src/components/QuestionFormModal.js",
   "./src/components/SubtopicCard.js",
   "./src/components/SubtopicFormModal.js",
-  "./src/components/TileCard.js",
   "./src/components/TopicCard.js",
   "./src/components/TopicFormModal.js",
   "./src/components/UserShell.js",
@@ -120,7 +119,6 @@ const APP_SHELL = [
   "./src/services/cookieService.js",
   "./src/services/dbService.js",
   "./src/services/disciplinesService.js",
-  "./src/services/educationService.js",
   "./src/services/groupsService.js",
   "./src/services/infoAndQuestionsService.js",
   "./src/services/knowledgeAreasService.js",

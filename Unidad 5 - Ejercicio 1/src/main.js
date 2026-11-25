@@ -6,48 +6,38 @@ import { initConnectionStatus } from "./utils/cnnStatus.js";
 import { initInstallPrompt } from "./utils/installPrompt.js";
 import { initInstallButton } from "./utils/installButton.js";
 import mountUserShell from "./components/UserShell.js";
-import HomeView from "./views/HomeView.js";
-import LoginView from "./views/LoginView.js";
-import EditView from "./views/EditView.js";
-import ShareView from "./views/ShareView.js";
-import AreasConocimientoView from "./views/AreasConocimientoView.js";
-import DisciplinasView from "./views/DisciplinasView.js";
-import TemasView from "./views/TemasView.js";
-import SubtemasView from "./views/SubtemasView.js";
-import PreguntasView from "./views/PreguntasView.js";
-import TablerosView from "./views/TablerosView.js";
-import BoardEditView from "./views/BoardEditView.js";
-import GruposView from "./views/GruposView.js";
-import { GroupParticipantsView, GroupSubtopicsView } from "./views/GroupDetailsView.js";
-import ConfigView from "./views/ConfigView.js";
-import AboutView from "./views/AboutView.js";
-import TileDetailView from "./views/TileDetailView.js";
-import ContactView from "./views/ContactView.js";
 import { registerServiceWorker } from "./utils/registerSW.js";
 import { initBackgroundSync } from "./utils/backgroundSync.js";
 import { mountOutboxUI } from "./utils/outboxUI.js";
 import { mountNotificationButton } from "./utils/notificationButton.js";
 
-
 const routes = [
-  { path: "/", view: HomeView },
-  { path: "/login", view: LoginView },
-  { path: "/editar", view: EditView },
-  { path: "/editar/preguntas", view: AreasConocimientoView },
-  { path: "/editar/disciplinas/:idka", view: DisciplinasView },
-  { path: "/editar/temas/:iddisc", view: TemasView },
-  { path: "/editar/subtemas/:idtopic", view: SubtemasView },
-  { path: "/editar/preguntas/:idsubtopic", view: PreguntasView },
-  { path: "/editar/tableros", view: TablerosView },
-  { path: "/editar/tableros/:id/editar", view: BoardEditView },
-  { path: "/editar/grupos", view: GruposView },
-  { path: "/editar/grupos/:id/integrantes", view: GroupParticipantsView },
-  { path: "/editar/grupos/:id/subtemas", view: GroupSubtopicsView },
-  { path: "/configuracion", view: ConfigView },
-  { path: "/acerca", view: AboutView },
-  { path: "/contacto", view: ContactView },
-  { path: "/tile/:id", view: TileDetailView },
-  { path: "/compartir", view: ShareView },
+  { path: "/", load: () => import("./views/HomeView.js") },
+  { path: "/login", load: () => import("./views/LoginView.js") },
+  { path: "/editar", load: () => import("./views/EditView.js") },
+  { path: "/editar/preguntas", load: () => import("./views/AreasConocimientoView.js") },
+  { path: "/editar/disciplinas/:idka", load: () => import("./views/DisciplinasView.js") },
+  { path: "/editar/temas/:iddisc", load: () => import("./views/TemasView.js") },
+  { path: "/editar/subtemas/:idtopic", load: () => import("./views/SubtemasView.js") },
+  { path: "/editar/preguntas/:idsubtopic", load: () => import("./views/PreguntasView.js") },
+  { path: "/editar/tableros", load: () => import("./views/TablerosView.js") },
+  { path: "/editar/tableros/:id/editar", load: () => import("./views/BoardEditView.js") },
+  { path: "/editar/grupos", load: () => import("./views/GruposView.js") },
+  // GroupDetailsView exporta dos vistas con nombre (sin default export):
+  // se envuelve el import() para normalizar la forma { default }.
+  {
+    path: "/editar/grupos/:id/integrantes",
+    load: () => import("./views/GroupDetailsView.js").then((m) => ({ default: m.GroupParticipantsView })),
+  },
+  {
+    path: "/editar/grupos/:id/subtemas",
+    load: () => import("./views/GroupDetailsView.js").then((m) => ({ default: m.GroupSubtopicsView })),
+  },
+  { path: "/configuracion", load: () => import("./views/ConfigView.js") },
+  { path: "/acerca", load: () => import("./views/AboutView.js") },
+  { path: "/contacto", load: () => import("./views/ContactView.js") },
+  { path: "/tile/:id", load: () => import("./views/TileDetailView.js") },
+  { path: "/compartir", load: () => import("./views/ShareView.js") },
 ];
 
 const app = document.getElementById("app");
