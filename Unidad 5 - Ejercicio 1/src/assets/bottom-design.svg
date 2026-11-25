@@ -1,0 +1,29 @@
+<svg width="470" height="260" viewbox="0 0 470 260"  xmlns="http://www.w3.org/2000/svg">
+   <defs>
+      <g id="cube"  transform="scale(0.5)" stroke="#6599C3" stroke-width="2">
+         <polygon points="88,192 1,144 1,49 88,96" fill="white" />
+         <polygon points="88,192 176,144 176,49 88,96" fill="white" />
+         <polygon points="176,49 88,1 1,49 88,96" fill="white" />
+      </g>
+      <polygon id="faceup" points="176,49 88,1 1,49 88,96" transform="scale(0.5)" stroke="#6599C3" stroke-width="2" />
+   </defs>
+   <use href="#cube" x="-20" y="210" />
+   <use href="#cube" x="68" y="210" />
+   <use href="#cube" x="156" y="210" />
+   <use href="#cube" x="244" y="210" />
+   <use href="#cube" x="332" y="210" />
+   <use href="#cube" x="420" y="210" />
+   <use href="#cube" x="112" y="140" />
+   <use href="#cube" x="200" y="140" />
+   <use href="#cube" x="288" y="140" />
+   <use href="#cube" x="376" y="140" />
+   <use href="#cube" x="244" y="70" />
+   <use href="#cube" x="332" y="70" />
+   <use href="#cube" x="288" y="0" />
+   <use href="#faceup" fill="#78BDF6" x="68" y="210" />
+   <use href="#faceup" fill="#E7E027" x="244" y="210" />
+   <use href="#faceup" fill="#65C36B" x="112" y="140" />
+   <use href="#faceup" fill="#C36565" x="200" y="140" />
+   <use href="#faceup" fill="#78BDF6" x="376" y="140" />
+   <use href="#faceup" fill="#C36565" x="288" y="0" />
+</svg>

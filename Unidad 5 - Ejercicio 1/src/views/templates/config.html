@@ -1,0 +1,43 @@
+<section id="config-section" class="config-view view-root" hidden>
+  <div class="view-header">
+    <h1 class="view-title">Configuración</h1>
+    <p class="view-lead">Preferencias de tu perfil en el editor de tablero.</p>
+  </div>
+  <div class="settings-list view-content">
+    <section class="setting-card">
+      <h3>Perfil</h3>
+      <div class="field">
+        <label for="nombre">Nombre de usuario</label>
+        <input id="nombre" type="text" readonly />
+      </div>
+      <div class="field">
+        <label for="email">Correo electrónico</label>
+        <input id="email" type="email" readonly />
+      </div>
+      <p style="margin-top:1rem;">
+        <button id="logout-btn" class="btn btn-logout" type="button">Cerrar sesión</button>
+      </p>
+    </section>
+
+    <!-- Notificaciones: solo aparece si el navegador tiene el permiso BLOQUEADO -->
+    <section id="notify-section" class="setting-card notify-card" hidden>
+      <h3><span class="material-symbols-outlined" aria-hidden="true">notifications_off</span>Las notificaciones están bloqueadas</h3>
+      <p>El navegador ya no mostrará avisos de sincronización para este sitio. Para reactivarlos:</p>
+      <ol>
+        <li>Haz clic en el ícono del <strong>candado</strong> en la barra de direcciones.</li>
+        <li>Abre <strong>“Permisos de este sitio”</strong> (o <strong>“Configuración del sitio”</strong>).</li>
+        <li>En <strong>Notificaciones</strong> cambia <em>Bloqueado</em> por
+            <strong>“Preguntar antes de bloquear”</strong> y guarda.</li>
+        <li>Recarga la página y acepta el aviso de permiso cuando aparezca.</li>
+      </ol>
+      <p class="notify-note">En Firefox: Menú ☰ → Ajustes → Privacidad y seguridad →
+        Notificaciones → <em>“Configuración…”</em> y quita este sitio de la lista de bloqueados.</p>
+    </section>
+  </div>
+
+  <p class="view-foot">
+    <a href="/acerca" data-link>Acerca de este sitio</a>
+    |
+    <a href="/contacto" data-link>Contacto</a>
+  </p>
+</section>

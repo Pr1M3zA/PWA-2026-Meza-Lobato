@@ -1,0 +1,73 @@
+<div class="home-view view-root">
+  <section class="card home-hero">
+    <h2>Wires&Ladders</h2>
+    <p> Panel principal del gestor de contenido de Wires&Ladders.</p>
+  </section>
+
+  <section class="card home-loc" id="location-block">
+    <h2>¿Desde dónde abriste la app?</h2>
+    <p class="home-loc__text">
+      Podemos mostrarte tu ubicación al entrar, solo para este aviso.
+      No se guarda en tu cuenta ni se envía a ningún servidor, y solo se lee
+      cuando pulses el botón.
+    </p>
+    <div class="home-loc__row">
+      <button type="button" class="modal-btn modal-btn-primary" id="location-btn">
+        Mostrar mi ubicación
+      </button>
+      <button type="button" class="modal-btn modal-btn-secondary" id="location-manual-toggle">
+        Prefiero escribirlo a mano
+      </button>
+      <span class="loc-chip" id="location-perm" data-state="unknown">Permiso: …</span>
+    </div>
+    <p class="loc-notice" id="location-notice" hidden></p>
+
+    <!-- Alternativa al GPS: escribir el lugar a mano (Req. 4). -->
+    <div class="home-loc__manual" id="location-manual-block" hidden>
+      <label class="form-label" for="location-manual">
+        Si no quieres compartir tu ubicación, anota el lugar a mano:
+      </label>
+      <div class="home-loc__row">
+        <input
+          id="location-manual"
+          class="form-input"
+          type="text"
+          placeholder="Escribe el lugar desde el que abriste la app"
+          autocomplete="off"
+        />
+        <button type="button" class="modal-btn modal-btn-primary" id="location-manual-btn">
+          Usar este lugar
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div class="home-grid">
+    <a class="home-card" href="/editar/tableros" data-link>
+      <h3>Tableros</h3>
+      <p>Consulta y edita las casillas del tablero.</p>
+      <span>Ir a tableros →</span>
+    </a>
+    <a class="home-card" href="/editar/preguntas" data-link>
+      <h3>Preguntas</h3>
+      <p>Administra el banco de preguntas del juego.</p>
+      <span>Ir a preguntas →</span>
+    </a>
+    <a class="home-card" href="/editar/grupos" data-link>
+      <h3>Grupos</h3>
+      <p>Gestiona los grupos de participantes.</p>
+      <span>Ir a grupos →</span>
+    </a>
+    <a class="home-card" href="/configuracion" data-link>
+      <h3>Configuración</h3>
+      <p>Preferencias de cuenta y notificaciones.</p>
+      <span>Ir a configuración →</span>
+    </a>
+  </div>
+
+  <p class="view-foot">
+    <a href="/acerca" data-link>Acerca de este sitio</a>
+    |
+    <a href="/contacto" data-link>Contacto</a>
+  </p>
+</div>

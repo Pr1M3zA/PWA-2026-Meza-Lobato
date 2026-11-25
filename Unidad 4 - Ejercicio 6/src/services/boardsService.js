@@ -47,4 +47,33 @@ export default class BoardsService {
     }
     return res.json();
   }
+
+  async deleteBoard(boardId) {
+    const token = getToken();
+    const res = await client.delete(`game/boards/${boardId}`, token);
+    if (!res.ok) {
+      const err = new Error(`HTTP ${res.status}`);
+      err.status = res.status;
+      throw err;
+    }
+    return res.json();
+  }
+
+  async createBoard(boardName, boardDescription) {
+    const token = getToken();
+    const res = await client.post(
+      "game/board",
+      {
+        board_name: boardName,
+        board_description: boardDescription,
+      },
+      token
+    );
+    if (!res.ok) {
+      const err = new Error(`HTTP ${res.status}`);
+      err.status = res.status;
+      throw err;
+    }
+    return res.json();
+  }
 }

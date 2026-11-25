@@ -1,0 +1,441 @@
+/* ----------------------------------------------------------- */
+/* LOGIN STANDALONE (/login)                                   */
+/* Montada en #login-root, fuera del App Shell.                */
+/* ----------------------------------------------------------- */
+
+:root {
+  /* Identidad de marca */
+  --wl-blue: #6599C3;
+  --wl-login-text: #294270;
+
+  /* Barras de color del formulario */
+  --wl-bar-red: #C36565;
+  --wl-bar-green: #65C36B;
+  --wl-bar-blue: #78BDF6;
+  --wl-bar-yellow: #E7E027;
+}
+
+/* El login es un diseño fijo en modo claro: se aísla aquí para no
+   tocar el tema guardado por el usuario. */
+body.is-login {
+  --card-bg: #ffffff;
+  --text-main: #294270;
+  --heading-color: #294270;
+  --input-bg: #ffffff;
+  --input-border: #294270;
+  --link-color: #294270;
+  --bg-main: #f7f7f7;
+  --shell-bg: #6599C3;
+  --card-border: #d9e2ef;
+  --muted-color: #6b7f9e;
+  --error-icon: #9ca3af;
+
+  background: #ffffff;
+  color: #294270;
+  overflow: hidden;
+}
+
+/* ---------- Ocultar el App Shell ---------- */
+body.is-login .app,
+body.is-login .app-header,
+body.is-login .app-sidebar,
+body.is-login .app-footer {
+  display: none !important;
+}
+
+body.is-login #login-root {
+  display: block;
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ---------- Estructura general ---------- */
+.login-page {
+  display: grid;
+  grid-template-columns: 30% minmax(0, 1fr);
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+}
+
+/* ---------- Panel de identidad ---------- */
+.login-identity {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3.5rem 0 0;
+  background: var(--wl-blue);
+  color: #ffffff;
+  overflow: hidden;
+}
+
+/* display:contents reparte los hijos directo en la columna del panel */
+.login-identity__brand {
+  display: contents;
+}
+
+.login-identity__name,
+.login-identity__tagline {
+  padding: 0 1.5rem;
+}
+
+.login-identity__logo {
+  flex: none;
+  width: 8rem;
+  height: auto;
+  display: block;
+  margin-bottom: 1.25rem;
+}
+
+.login-identity__name {
+  margin-top: 0;
+  align-self: center;
+  font-family: 'Jomhuria', cursive;
+  font-size: 2.5rem;
+  font-weight: 400;
+  line-height: 1.1;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+.login-identity__rule {
+  width: 75%;
+  margin: 0.9rem 0 0.4rem;
+  border: none;
+  border-top: 2px solid #ffffff;
+}
+
+.login-identity__tagline {
+  align-self: center;
+  font-size: 1.375rem;
+  font-weight: 500;
+  color: #ffffff;
+  line-height: 1.2;
+  text-align: center;
+}
+
+/* Cubos al pie del panel; se amplían para conservar su tamaño natural */
+.login-identity__cubes {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 110%;
+  max-width: none;
+  height: auto;
+  display: block;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+/* ---------- Panel del formulario ---------- */
+.login-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 2rem;
+  background-color: #f7f7f7;
+  background-image: url("../src/assets/bg-pattern.svg");
+  background-repeat: repeat;
+  background-position: center top;
+  background-size: auto;
+}
+
+/* ---------- Recuadro del formulario ---------- */
+.login-card {
+  box-sizing: border-box;
+  width: 460px;
+  max-width: 100%;
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 2.5rem 3rem;
+  background: #ffffff;
+  border: 1px solid var(--wl-bar-blue);
+  border-radius: 6px;
+}
+
+/* ---------- Barras de color ---------- */
+.login-bars {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  flex: none;
+}
+
+.login-bars span {
+  flex: 1 1 0;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--c);
+}
+
+/* ---------- Textos ---------- */
+.login-title {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--wl-login-text);
+  text-align: left;
+}
+
+.login-subtitle {
+  margin: 0.45rem 0 0;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--wl-login-text);
+  text-align: left;
+}
+
+/* ---------- Formulario ---------- */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 0;
+}
+
+.login-input {
+  box-sizing: border-box;
+  width: 100%;
+  font-family: var(--font-family);
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--wl-login-text);
+  background: #ffffff;
+  border: 1px solid var(--wl-login-text);
+  border-radius: 999px;
+  padding: 0.9rem 1.25rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.login-input::placeholder {
+  color: #8ea0bb;
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: var(--wl-blue);
+  box-shadow: 0 0 0 3px rgba(101, 153, 195, 0.25);
+}
+
+.login-password {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.login-password .login-input {
+  padding-right: 3rem;
+}
+
+.login-eye {
+  position: absolute;
+  right: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--wl-blue);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.login-eye svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: block;
+}
+
+.login-eye:hover {
+  background: rgba(101, 153, 195, 0.12);
+}
+
+.login-eye:focus-visible {
+  outline: 2px solid var(--wl-blue);
+  outline-offset: 2px;
+}
+
+.login-submit {
+  font-family: var(--font-family);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: var(--wl-blue);
+  border: none;
+  border-radius: 999px;
+  padding: 0.9rem 2rem;
+  cursor: pointer;
+  align-self: center;
+  min-width: 13rem;
+  margin-top: 0.35rem;
+  transition: background 0.2s ease;
+}
+
+.login-submit:hover:not(:disabled) {
+  background: #4f7ba0;
+}
+
+.login-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.login-error {
+  margin: 0;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.5rem;
+  background: rgba(194, 106, 106, 0.12);
+  border: 1px solid var(--answer-red-color);
+  color: var(--answer-red-text);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+/* ----------------------------------------------------------- */
+/* MÓVIL Y TABLET (≤900px)                                     */
+/* La identidad pasa a header horizontal; sin cubos decorativos.*/
+/* ----------------------------------------------------------- */
+@media (max-width: 900px) {
+  .login-page {
+    display: block;
+  }
+
+  .login-identity {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .login-identity__logo {
+    width: 3.5rem;
+    margin-bottom: 0;
+    flex: none;
+  }
+
+  .login-identity__brand {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .login-identity__name {
+    margin-top: 0;
+    align-self: auto;
+    font-size: 1.75rem;
+    text-align: left;
+    padding: 0;
+  }
+
+  .login-identity__rule {
+    width: 100%;
+    margin: 0.4rem 0 0.3rem;
+    border-top-width: 1px;
+  }
+
+  .login-identity__tagline {
+    align-self: auto;
+    font-size: 1.0625rem;
+    text-align: left;
+    padding: 0;
+  }
+
+  .login-identity__cubes {
+    display: none;
+  }
+
+  .login-panel {
+    align-items: flex-start;
+    min-height: calc(100dvh - 4.5rem);
+    padding: 20px;
+  }
+
+  .login-card {
+    width: 100%;
+    max-width: 460px;
+    min-height: 480px;
+    margin: 0 auto;
+    padding: 1.75rem 1.25rem;
+  }
+
+  .login-title {
+    font-size: 1.75rem;
+  }
+
+  .login-subtitle {
+    font-size: 0.9375rem;
+  }
+
+  .login-input {
+    padding: 0.85rem 1.1rem;
+    font-size: 0.9375rem;
+  }
+
+  .login-submit {
+    width: 100%;
+    min-width: 0;
+    font-size: 1.0625rem;
+  }
+}
+
+/* Tablet (601–900px): tamaños intermedios */
+@media (min-width: 601px) and (max-width: 900px) {
+  .login-identity {
+    padding: 1rem 1.5rem;
+  }
+
+  .login-identity__logo {
+    width: 4rem;
+  }
+
+  .login-identity__name {
+    font-size: 2rem;
+  }
+
+  .login-identity__tagline {
+    font-size: 1.125rem;
+  }
+
+  .login-panel {
+    align-items: center;
+    min-height: calc(100dvh - 5.5rem);
+    padding: 1.5rem;
+  }
+
+  .login-card {
+    min-height: 520px;
+    padding: 2rem 2.5rem;
+  }
+
+  .login-title {
+    font-size: 1.875rem;
+  }
+
+  .login-subtitle {
+    font-size: 1rem;
+  }
+
+  .login-input {
+    font-size: 1rem;
+    padding: 0.9rem 1.25rem;
+  }
+}

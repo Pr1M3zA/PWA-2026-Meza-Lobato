@@ -1,0 +1,91 @@
+<!-- ----------------------------------------------------------- -->
+<!-- LOGIN STANDALONE (/login)                                   -->
+<!-- Montada fuera del App Shell (en #login-root).               -->
+<!-- ----------------------------------------------------------- -->
+<div class="login-page">
+
+  <!-- Panel de identidad: columna izquierda en desktop, header en móvil -->
+  <section class="login-identity">
+    <img class="login-identity__logo" src="src/assets/wireladders-logo.svg" alt="" aria-hidden="true" />
+
+    <div class="login-identity__brand">
+      <h1 class="login-identity__name">Wires&amp;Ladders</h1>
+      <hr class="login-identity__rule" />
+      <p class="login-identity__tagline">Panel educativo</p>
+    </div>
+
+    <!-- Cubos decorativos: solo en desktop -->
+    <img class="login-identity__cubes" src="src/assets/bottom-design.svg" alt="" aria-hidden="true" />
+  </section>
+
+  <!-- Panel del formulario -->
+  <section class="login-panel">
+    <div class="login-card">
+
+      <!-- Barras de color (superior) -->
+      <div class="login-bars" aria-hidden="true">
+        <span style="--c: var(--wl-bar-red);"></span>
+        <span style="--c: var(--wl-bar-green);"></span>
+        <span style="--c: var(--wl-bar-blue);"></span>
+        <span style="--c: var(--wl-bar-yellow);"></span>
+      </div>
+
+      <div class="login-heading">
+        <h2 class="login-title">Bienvenido.</h2>
+        <p class="login-subtitle">Ingrese sus credenciales para continuar</p>
+      </div>
+
+      <form id="login-form" class="login-form" novalidate>
+        <label class="sr-only" for="login-id">Nombre de usuario o correo electrónico</label>
+        <input
+          id="login-id"
+          class="login-input"
+          type="text"
+          autocomplete="username"
+          placeholder="Usuario o correo electrónico"
+          required
+        />
+
+        <label class="sr-only" for="login-password">Contraseña</label>
+        <div class="login-password">
+          <input
+            id="login-password"
+            class="login-input"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Contraseña"
+            required
+          />
+          <button
+            type="button"
+            id="login-toggle-password"
+            class="login-eye"
+            aria-label="Mostrar contraseña"
+            aria-pressed="false"
+            title="Mostrar contraseña"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          </button>
+        </div>
+
+        <button type="submit" class="login-submit">Iniciar sesión</button>
+
+        <p id="login-error" class="login-error" role="alert" hidden></p>
+      </form>
+
+      <!-- Barras de color (inferior) -->
+      <div class="login-bars" aria-hidden="true">
+        <span style="--c: var(--wl-bar-red);"></span>
+        <span style="--c: var(--wl-bar-green);"></span>
+        <span style="--c: var(--wl-bar-blue);"></span>
+        <span style="--c: var(--wl-bar-yellow);"></span>
+      </div>
+
+    </div>
+  </section>
+
+</div>
