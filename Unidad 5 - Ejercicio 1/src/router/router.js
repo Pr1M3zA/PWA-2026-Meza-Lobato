@@ -24,11 +24,7 @@ const LOGIN_PATH = "/login";
 // Convierte cualquier URL (con/sin origin, con/sin encoding, con/sin index.html)
 // a la ruta interna consistente. Usada por el click handler y por render()
 // para que ambos calculen el mismo path.
-//
-// OJO: `new URL(...).pathname` devuelve la ruta DECODIFICADA, mientras que
-// BASE_URL viene codificada ("Unidad%205%20-%20Ejercicio%201"). Por eso se
-// quitan ambas variantes: sin esto el prefijo no se recortaba y la ruta
-// interna quedaba como la ruta completa (el prefijo nunca se detectaba).
+
 function normalizePath(href) {
   let pathname;
   try {
