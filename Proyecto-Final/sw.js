@@ -9,7 +9,7 @@ console.log("[SW] typeof caches => ", typeof caches);
 
 console.log("[SW] Scope => ", self.registration.scope);
 
-const CACHE_VERSION = "wl-shell-v18";
+const CACHE_VERSION = "wl-shell-v19";
 
 const CDN_ORIGIN = "https://esm.sh";
 const ALLOWED_HOSTS = [self.location.origin, CDN_ORIGIN, "fonts.googleapis.com", "fonts.gstatic.com"];
@@ -20,25 +20,6 @@ let announcedApiOrigin = null;
 const SYNC_TAG = "sync-outbox";
 const OUTBOX_DB = "wlweb";
 const OUTBOX_STORE = "outbox";
-
-const APP_BASE = new URL(".", self.location.href).pathname; 
-function routeForItem(item) {
-  if (item?.disciplineId) return `editar/temas/${item.disciplineId}`;
-  return "editar";
-}
-
-function notifyOutbox({ title, body, tag, item }) {
-  const options = {
-    body,
-    tag, // mismo tag = el sistema reemplaza la anterior en vez de apilar duplicados
-    icon: new URL("icons/icon-192.png", self.location.href).href,
-    badge: new URL("icons/favicon-32.png", self.location.href).href,
-    data: { url: APP_BASE + routeForItem(item) },
-  };
-  self.registration.showNotification(title, options).catch((error) => {
-    console.warn("[SW] No se pudo mostrar la notificación:", error);
-  });
-}
 
 function openOutboxDB() {
   return new Promise((resolve, reject) => {
@@ -112,7 +93,6 @@ const APP_SHELL = [
   "./src/main.js",
   "./src/router/router.js",
   "./src/services/apiClient.js",
-  "./src/services/pushService.js",
   "./src/services/authService.js",
   "./src/services/backgroundsService.js",
   "./src/services/boardsService.js",
@@ -132,11 +112,9 @@ const APP_SHELL = [
   "./src/utils/backgroundSync.js",
   "./src/utils/outboxUI.js",
   "./src/utils/errorMessage.js",
-  "./src/utils/geolocation.js",
   "./src/utils/share.js",
   "./src/utils/installButton.js",
   "./src/utils/installPrompt.js",
-  "./src/utils/notificationButton.js",
   "./src/utils/moduleLoader.js",
   "./src/utils/registerSW.js",
   "./src/utils/slugify.js",
@@ -237,11 +215,6 @@ function isApiUrl(url) {
 
 function shouldHandle(request) {
   const url = new URL(request.url);
-
-  // Push key/subscription requests must always reach the backend, never the app cache.
-  if (isApiUrl(url) && (url.pathname === "/push" || url.pathname.startsWith("/push/"))) {
-    return false;
-  }
 
   if (request.method !== "GET") return false;
 
@@ -402,8 +375,6 @@ async function flushOutbox(isLastChance) {
   flushing = true;
 
   const db = await openOutboxDB();
-  let sentCount = 0;
-  let lastSent = null;
 
   try {
     if (!db.objectStoreNames.contains(OUTBOX_STORE)) {
@@ -462,14 +433,6 @@ async function flushOutbox(isLastChance) {
           label: live.label,
           status: response.status,
         });
-        if (permanent || isLastChance) {
-          notifyOutbox({
-            title: "Revisa tu cola de sincronización",
-            body: `«${live.label ?? "Cambio"}» no pudo enviarse (HTTP ${response.status}). Es probable que la sesión haya expirado: vuelve a iniciar sesión.`,
-            tag: "wl-outbox-atencion",
-            item: live,
-          });
-        }
         console.warn("[SW] Rechazado por el servidor =>", live.label, response.status);
 
         if (permanent || isLastChance) continue;
@@ -480,9 +443,6 @@ async function flushOutbox(isLastChance) {
       // Sólo se borra cada elemento tras la confirmación del servidor.
       await outboxDelete(db, live.id);
       console.log("[SW] Enviado y borrado de la cola =>", live.label);
-      sentCount++;
-      lastSent = live;
-
       notifyClients({
         type: "OUTBOX_SENT",
         id: live.id,
@@ -495,17 +455,6 @@ async function flushOutbox(isLastChance) {
   } finally {
     db.close();
     flushing = false;
-
-    if (sentCount > 0) {
-      notifyOutbox({
-        title: "Conexión restablecida ✓",
-        body: sentCount === 1
-          ? `Se envió el cambio pendiente: «${lastSent?.label ?? "Tema"}».`
-          : `Se enviaron ${sentCount} cambios pendientes, el último: «${lastSent?.label ?? "Tema"}».`,
-        tag: "wl-outbox-sincronizado",
-        item: lastSent,
-      });
-    }
   }
 }
 
@@ -513,75 +462,4 @@ function notifyClients(message) {
   self.clients.matchAll({ type: "window" }).then((clients) => {
     clients.forEach((client) => client.postMessage(message));
   });
-}
-
-/* ---------- notificationclick: cerrar el aviso y abrir/enfocar la pantalla relacionada ---------- */
-
-self.addEventListener("notificationclick", (event) => {
-  event.notification.close();
-
-  const targetUrl = event.notification.data?.url || APP_BASE;
-  const absoluteUrl = new URL(targetUrl, self.location.href).href;
-
-  event.waitUntil((async () => {
-    const windows = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
-
-    for (const client of windows) {
-      await client.focus();
-      client.postMessage({ type: "NOTIFICATION_NAVIGATE", url: absoluteUrl });
-      return;
-    }
-
-    await self.clients.openWindow(absoluteUrl);
-  })());
-});
-
-self.addEventListener("push", (event) => {
-  const message = readPushMessage(event);
-  const appScope = new URL(self.registration.scope);
-  const icon = new URL("icons/icon-192.png", appScope).href;
-  const badge = new URL("icons/favicon-32.png", appScope).href;
-  const targetUrl = safePushUrl(message.url, appScope);
-
-  event.waitUntil(self.registration.showNotification(message.title, {
-    body: message.body,
-    icon,
-    badge,
-    tag: message.tag,
-    data: { url: targetUrl },
-  }));
-});
-
-function readPushMessage(event) {
-  const fallback = {
-    title: "Wires&Ladders",
-    body: "Tienes una novedad en la app.",
-    url: "./",
-  };
-  if (!event.data) return fallback;
-
-  const text = event.data.text();
-  try {
-    const message = JSON.parse(text);
-    return {
-      ...fallback,
-      ...message,
-      title: typeof message.title === "string" ? message.title : fallback.title,
-      body: typeof message.body === "string" ? message.body : fallback.body,
-    };
-  } catch {
-    return { ...fallback, body: text || fallback.body };
-  }
-}
-
-function safePushUrl(value, appScope) {
-  try {
-    const target = new URL(typeof value === "string" ? value : "./", appScope);
-    if (target.origin === appScope.origin && target.pathname.startsWith(appScope.pathname)) {
-      return target.href;
-    }
-  } catch {
-    // Se cae a la raíz de la app si el destino no es una URL válida.
-  }
-  return appScope.href;
 }

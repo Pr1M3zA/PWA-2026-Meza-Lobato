@@ -1,0 +1,29 @@
+<section id="config-section" class="config-view view-root" hidden>
+  <div class="view-header">
+    <h1 class="view-title">Configuración</h1>
+    <p class="view-lead">Preferencias de tu perfil en el editor de tablero.</p>
+  </div>
+  <div class="settings-list view-content">
+    <section class="setting-card">
+      <h3>Perfil</h3>
+      <div class="field">
+        <label for="nombre">Nombre de usuario</label>
+        <input id="nombre" type="text" readonly />
+      </div>
+      <div class="field">
+        <label for="email">Correo electrónico</label>
+        <input id="email" type="email" readonly />
+      </div>
+      <p style="margin-top:1rem;">
+        <button id="logout-btn" class="btn btn-logout" type="button">Cerrar sesión</button>
+      </p>
+    </section>
+
+  </div>
+
+  <p class="view-foot">
+    <a href="/acerca" data-link>Acerca de este sitio</a>
+    |
+    <a href="/contacto" data-link>Contacto</a>
+  </p>
+</section>

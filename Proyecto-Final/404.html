@@ -14,7 +14,7 @@
     })();
   </script>
 
-  <base href="/PWA-2026-Meza-Lobato/proyecto-final">
+  <base href="/PWA-2026-Meza-Lobato/">
 
   <!-- PWA: manifest + theme + iconos -->
   <link rel="manifest" href="manifest.json">
@@ -39,10 +39,6 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
   <!-- Fuente Jomhuria para el brand del sidebar -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jomhuria&display=swap" />
-  <!-- Fuente Manrope (letra general de la app y del login) -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" />
-  <!-- Estilos de la pantalla de login standalone (/login) -->
-  <link rel="stylesheet" href="styles/login.css" />
 </head>
 <body>
 
@@ -82,27 +78,27 @@
       </div>
 
       <nav class="app-nav">
-        <a href="/PWA-2026-Meza-Lobato/proyecto-final/" data-link>
+        <a href="/PWA-2026-Meza-Lobato/Proyecto-Final/" data-link>
           <svg class="icon" aria-hidden="true"><use href="src/assets/icons.svg#icon-home"></use></svg>
           Inicio
         </a>
 
         <div class="protected-nav" hidden>
-          <a href="/PWA-2026-Meza-Lobato/proyecto-final/editar/preguntas" data-link>
+          <a href="/PWA-2026-Meza-Lobato/Proyecto-Final/editar/preguntas" data-link>
             <svg class="icon" aria-hidden="true"><use href="src/assets/icons.svg#icon-help"></use></svg>
             Preguntas
           </a>
-          <a href="/PWA-2026-Meza-Lobato/proyecto-final/editar/tableros" data-link>
+          <a href="/PWA-2026-Meza-Lobato/Proyecto-Final/editar/tableros" data-link>
             <svg class="icon" aria-hidden="true"><use href="src/assets/icons.svg#icon-dashboard"></use></svg>
             Tableros
           </a>
-          <a href="/PWA-2026-Meza-Lobato/proyecto-final/editar/grupos" data-link>
+          <a href="/PWA-2026-Meza-Lobato/Proyecto-Final/editar/grupos" data-link>
             <svg class="icon" aria-hidden="true"><use href="src/assets/icons.svg#icon-groups"></use></svg>
             Grupos
           </a>
         </div>
 
-        <a href="/PWA-2026-Meza-Lobato/proyecto-final/configuracion" data-link>
+        <a href="/PWA-2026-Meza-Lobato/Proyecto-Final/configuracion" data-link>
           <svg class="icon" aria-hidden="true"><use href="src/assets/icons.svg#icon-config"></use></svg>
           Configuración
         </a>
@@ -142,23 +138,16 @@
   </div>
 
   <footer class="app-footer">   <!-- Solo visible en modo móvil (<640px) -->
-    <a href="/PWA-2026-Meza-Lobato/proyecto-final/" data-link aria-label="Home" title="Home">
+    <a href="/PWA-2026-Meza-Lobato/Proyecto-Final/" data-link aria-label="Home" title="Home">
       <svg class="icon" aria-hidden="true"><use href="src/assets/icons.svg#icon-home"></use></svg>
     </a>
-    <a class="protected-nav" hidden href="/PWA-2026-Meza-Lobato/proyecto-final/editar" data-link aria-label="Editar" title="Editar">
+    <a class="protected-nav" hidden href="/PWA-2026-Meza-Lobato/Proyecto-Final/editar" data-link aria-label="Editar" title="Editar">
       <svg class="icon" aria-hidden="true"><use href="src/assets/icons.svg#icon-edit"></use></svg>
     </a>
-    <a href="/PWA-2026-Meza-Lobato/proyecto-final/configuracion" data-link aria-label="Configuración" title="Configuración">
+    <a href="/PWA-2026-Meza-Lobato/Proyecto-Final/configuracion" data-link aria-label="Configuración" title="Configuración">
       <svg class="icon" aria-hidden="true"><use href="src/assets/icons.svg#icon-config"></use></svg>
     </a>
   </footer>
-
-  <!-- ----------------------------------------------------------- -->
-  <!-- CONTENEDOR DEL LOGIN STANDALONE                            -->
-  <!-- Vive FUERA de .app: el login no hereda el App Shell        -->
-  <!-- (header / sidebar / footer). El router lo llena en /login.  -->
-  <!-- ----------------------------------------------------------- -->
-  <div id="login-root"></div>
 
   <script type="module" src="src/main.js"></script>
 </body>
