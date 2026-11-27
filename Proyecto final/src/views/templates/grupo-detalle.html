@@ -1,0 +1,40 @@
+<div class="group-detail-view view-root" id="group-detail-view">
+  <a class="group-back-link" href="/editar/grupos" data-link>
+    <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+    Volver a grupos
+  </a>
+  <header class="group-detail-header">
+    <div>
+      <p class="group-detail-description">{{groupTitle}}</p>
+      <h1 class="view-title">{{detailTitle}} <span class="group-count" id="group-detail-count">{{count}}</span></h1>
+    </div>
+    <button type="button" class="modal-btn modal-btn-primary" id="group-detail-add">
+      <span class="material-symbols-outlined" aria-hidden="true">{{detailIcon}}</span>
+      Agregar {{detailTitleSingular}}
+    </button>
+  </header>
+
+  <p class="group-notice" id="group-detail-notice" role="status" hidden></p>
+  <section class="group-detail-collection" id="group-detail-collection" aria-live="polite">
+    {{collection}}
+  </section>
+
+  <div class="modal-backdrop" id="group-detail-modal" hidden>
+    <article class="modal-card group-detail-modal-card" role="dialog" aria-modal="true" aria-labelledby="group-detail-modal-title">
+      <button type="button" class="modal-close" id="group-detail-close" aria-label="Cerrar">
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+      <p class="modal-section">{{groupTitle}}</p>
+      <h2 class="modal-card__title" id="group-detail-modal-title">Agregar {{detailTitleSingular}}</h2>
+      <label class="form-label" for="group-detail-search">{{modalSearchLabel}}</label>
+      <input class="form-input" id="group-detail-search" type="search" autocomplete="off" placeholder="{{modalSearchPlaceholder}}">
+      <p class="form-hint">{{modalHint}}</p>
+      <div class="group-user-results group-detail-add-options" id="group-detail-options" aria-live="polite"></div>
+      <div class="modal-actions">
+        <button type="button" class="modal-btn modal-btn-secondary" id="group-detail-cancel">Cerrar</button>
+      </div>
+    </article>
+  </div>
+
+  {{confirmModal}}
+</div>
