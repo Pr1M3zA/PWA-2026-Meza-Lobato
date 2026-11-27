@@ -4,7 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
-const BASE = "/PWA-2026-Meza-Lobato";
+const BASE = "/PWA-2026-Meza-Lobato/proyecto-final";
 const PORT = 5501;
 
 const TYPES = {
